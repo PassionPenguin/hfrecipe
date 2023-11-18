@@ -2,16 +2,25 @@ import ReactMarkdown from "react-markdown";
 import Recipe from "@/lib/models/recipe";
 import Link from "next/link";
 import ExtendedImage from "@/components/extended-markdown/extended-image";
-import {UserRole} from "../user/usermodel";
-import Loading, {LoadingSkeletonType} from "@/components/loading";
+import { UserRole } from "../user/usermodel";
+import Loading, { LoadingSkeletonType } from "@/components/loading";
+import prisma from "@/lib/prisma";
 
-export default function RecipeDetail({
-  recipe,
+export default async function RecipeDetail({
+  recipeId,
   userRole,
 }: Readonly<{
-  recipe: Recipe;
+  recipeId: string;
   userRole: UserRole;
 }>) {
+  const recipe = await prisma.recipe.findUnique({
+    where: {
+      publicId: String(recipeId),
+    },
+    include: {
+      cuisineType: true,
+    },
+  });
   let editorialButtons = <></>;
   if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
     editorialButtons = (
@@ -44,7 +53,7 @@ export default function RecipeDetail({
                   alt={props.alt}
                   className="py-2 rounded-lg lg:max-w-[600px] md:max-w-[480px] sm:max-w-[360px] mx-auto"
                 />
-                <span className="text-center text-base text-gray-600 dark:text-gray-400 block" >
+                <span className="text-center text-base text-gray-600 dark:text-gray-400 block">
                   {props.alt}
                 </span>
               </>

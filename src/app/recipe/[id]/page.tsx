@@ -1,8 +1,8 @@
-import prisma from "@/lib/prisma";
-import React from "react";
+import React, { Suspense } from "react";
 import RecipeDetail from "../recipe-detail";
 import { protectRoutes } from "@/lib/protectRoutes";
 import Frame from "@/components/frame/frame";
+import Loading, { LoadingSkeletonType } from "@/components/loading";
 
 export default async function RecipeDetailPage({
   params,
@@ -16,20 +16,18 @@ export default async function RecipeDetailPage({
   if (!checkUser.status) {
     body = <>NO PERMISSION</>;
   } else {
-    const recipe = await prisma.recipe.findUnique({
-      where: {
-        publicId: String(params?.id),
-      },
-      include: {
-        cuisineType: true,
-      },
-    });
-
     body = (
       <>
         <div className="">
           <div className="lg:mr-96 text-xl font-serif">
-            <RecipeDetail recipe={recipe} userRole={checkUser.userType} />
+            <Suspense
+              fallback={<Loading type={LoadingSkeletonType.imageAndText} />}
+            >
+              <RecipeDetail
+                recipeId={params.id}
+                userRole={checkUser.userType}
+              />
+            </Suspense>
           </div>
         </div>
         <div className="hidden lg:block absolute top-0 right-0 px-4 mx-4 py-2">

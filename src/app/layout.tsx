@@ -1,6 +1,8 @@
 import { Analytics } from "@vercel/analytics/react";
 import "./global.scss";
 import { HFApp } from "@/lib/app";
+import { Suspense } from "react";
+import Loading, { LoadingSkeletonType } from "@/components/loading";
 
 export const metadata = {
   title: "HF's Recipes",
@@ -13,7 +15,9 @@ export default function Layout({ children }) {
   return (
     <html lang="en">
       <body className="dark:bg-slate-800 text-gray-800 dark:text-gray-200">
-        {children}
+        <Suspense fallback={<Loading type={LoadingSkeletonType.text} />}>
+          {children}
+        </Suspense>
         <Analytics />
       </body>
     </html>
