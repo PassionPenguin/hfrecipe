@@ -1,14 +1,15 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DB_URL")
+  url      = env("DSN")
 }
 
 model CuisineType {
-  publicId    String    @id(map: "cuisine_type_pk") @db.VarChar(12)
+  publicId    String    @id(map: "CuisineType_pk") @db.VarChar(12)
   title       String?   @db.VarChar(127)
   description String?
   createdAt   DateTime? @default(now()) @db.Timestamptz(6)
@@ -21,10 +22,10 @@ model Ingredient {
   publicId      String    @id(map: "ingredients_pk") @db.VarChar(12)
   description   String
   expensiveness Int?
-  createdAt     DateTime? @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime? @default(now()) @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
   deletedAt     DateTime? @db.Timestamptz(6)
-  title         String?   @db.VarChar(31)
+  title         String    @db.VarChar(31)
 }
 
 model Recipe {
@@ -32,7 +33,6 @@ model Recipe {
   title              String      @db.VarChar(128)
   description        String?
   cuisineTypeId      String      @db.VarChar(12)
-  cuisineType        CuisineType @relation(fields: [cuisineTypeId], references: [publicId])
   estimatedTime      String?     @db.VarChar(63)
   servingsMultiplier Int
   rating             Int?
@@ -41,20 +41,57 @@ model Recipe {
   tools              String?
   difficulty         Int?
   steps              String?
-  createdAt          DateTime?   @default(now()) @db.Timestamptz(6)
-  updatedAt          DateTime?   @default(now()) @db.Timestamptz(6)
+  createdAt          DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime    @default(now()) @db.Timestamptz(6)
   deletedAt          DateTime?   @db.Timestamptz(6)
   odCover            String?     @db.VarChar(256)
   odVideo            String?     @db.VarChar(256)
   tips               String?
+  cuisineType        CuisineType @relation(fields: [cuisineTypeId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "recipe_cuisine_type_public_id_fk")
 }
 
 model Tool {
-  publicId      String    @id(map: "tool_pk") @db.VarChar(12)
+  publicId      String    @id(map: "Tool_pk") @db.VarChar(12)
   description   String
   expensiveness Int?
-  createdAt     DateTime? @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime? @default(now()) @db.Timestamptz(6)
+  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
   deletedAt     DateTime? @db.Timestamptz(6)
-  title         String?   @db.VarChar(31)
+  title         String    @db.VarChar(31)
+}
+
+model User {
+  publicId  String    @id(map: "user_pk") @db.Char(12)
+  title     String    @unique(map: "user_name_pk") @db.VarChar(16)
+  password  String    @db.VarChar(64)
+  email     String    @db.VarChar(64)
+  role      String    @default("01") @db.Bit(2)
+  avatar    String    @default("01") @db.Bit(2)
+  bio       String?   @db.VarChar(256)
+  createdAt DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime  @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
+}
+
+model fRecipeIngredient {
+  ingredientId String  @db.Char(12)
+  recipeId     String  @db.Char(12)
+  amount       Int?
+  unit         String? @db.Bit(4)
+
+  @@id([recipeId, ingredientId], map: "fRecipeIngredient_pk")
+}
+
+model fRecipeTool {
+  recipeId String  @db.Char(12)
+  toolId   String  @db.Char(12)
+  amount   Int?
+  unit     String? @db.Bit(4)
+
+  @@id([recipeId, toolId], map: "recipe_tool_pk")
+}
+
+model UserCode {
+  code    String  @unique(map: "UserCode_pk") @db.Char(12)
+  expired Boolean @default(false)
 }
