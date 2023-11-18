@@ -14,13 +14,13 @@ export default function RecipeDetail({
   let editorialButtons = <></>;
   if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
     editorialButtons = (
-      <>
+      <div className="pt-16">
         <Link href={"/recipe/edit/" + recipe.publicId}>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <button className="px-4 py-2 text-slate-900 rounded hover:text-slate-700 dark:text-slate-100 dark:hover:text-slate-300 border-2 border-slate-900 dark:border-slate-100">
             Edit
           </button>
         </Link>
-      </>
+      </div>
     );
   }
   return (
@@ -33,7 +33,7 @@ export default function RecipeDetail({
         Steps
       </h2>
       <ReactMarkdown
-        className="py-4 space-y-4 list-decimal"
+        className="py-4 space-y-4 markdown"
         components={{
           img(props) {
             return (
@@ -49,16 +49,6 @@ export default function RecipeDetail({
               </>
             );
           },
-          ol(props) {
-            return (
-              <ol className="list-decimal list-inside" start={props.start}>
-                {props.children}
-              </ol>
-            );
-          },
-          ul(props) {
-            return <ul className="list-disc list-inside">{props.children}</ul>;
-          },
         }}
       >
         {recipe.steps}
@@ -67,21 +57,7 @@ export default function RecipeDetail({
       <h2 className="text-3xl font-bold py-4" id="tips">
         Tips
       </h2>
-      <ReactMarkdown
-        className="py-4 space-y-4 list-decimal"
-        components={{
-          ol(props) {
-            return (
-              <ol className="list-decimal list-inside" start={props.start}>
-                {props.children}
-              </ol>
-            );
-          },
-          ul(props) {
-            return <ul className="list-disc list-inside">{props.children}</ul>;
-          },
-        }}
-      >
+      <ReactMarkdown className="py-4 space-y-4 markdown" components={{}}>
         {recipe.tips}
       </ReactMarkdown>
       {editorialButtons}

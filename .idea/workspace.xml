@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cd53d0ac-3035-4e9e-a051-90bfc8d9266a" name="Changes" comment="refactor project, remove redundant files">
+    <list default="true" id="cd53d0ac-3035-4e9e-a051-90bfc8d9266a" name="Changes" comment="feat: TOC in recipe detail pages">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/recipe/[id]/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/recipe/[id]/page.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/recipe/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/recipe/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/global.scss" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/global.scss" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/recipe/recipe-detail.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/recipe/recipe-detail.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/frame/frame.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/frame/frame.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -158,7 +156,7 @@
       <workItem from="1700226174490" duration="6648000" />
       <workItem from="1700284902592" duration="1772000" />
       <workItem from="1700286792855" duration="9792000" />
-      <workItem from="1700310689635" duration="2907000" />
+      <workItem from="1700310689635" duration="3379000" />
     </task>
     <task id="LOCAL-00001" summary="feat: msgraph">
       <option name="closed" value="true" />
@@ -312,11 +310,30 @@
       <option name="project" value="LOCAL" />
       <updated>1700310915743</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="feat: TOC in recipe detail pages">
+      <option name="closed" value="true" />
+      <created>1700313749103</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1700313749103</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
@@ -340,6 +357,7 @@
     <MESSAGE value="fix: incorrect path, lint, interface refactor" />
     <MESSAGE value="refactor project" />
     <MESSAGE value="refactor project, remove redundant files" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor project, remove redundant files" />
+    <MESSAGE value="feat: TOC in recipe detail pages" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: TOC in recipe detail pages" />
   </component>
 </project>
