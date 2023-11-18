@@ -20,7 +20,7 @@ export default function Frame({
   return (
     <>
       <Header userRole={userRole} userName={userName} />
-      <main className="container my-24 mx-auto px-8">
+      <main className="container my-24 mx-auto px-8 relative">
         <Banner
           state={searchParams["state"] === "true"}
           msg={`${searchParams["msg"]}`}

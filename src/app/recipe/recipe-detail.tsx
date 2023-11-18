@@ -29,26 +29,61 @@ export default function RecipeDetail({
       <p className="border-l-4 text-xl border-gray-500 pl-4 text-gray-600 dark:text-gray-400 py-2 my-2">
         {recipe.description}
       </p>
-      <h2 className="text-2xl font-bold py-4">Steps</h2>
+      <h2 className="text-3xl font-bold py-4" id="step">
+        Steps
+      </h2>
       <ReactMarkdown
-        className="py-4 space-y-2"
+        className="py-4 space-y-4 list-decimal"
         components={{
           img(props) {
             return (
-              <ExtendedImage
-                src={props.src}
-                alt={props.alt}
-                className="rounded lg:max-w-[600px] md:max-w-[480px] sm:max-w-[360px]"
-              />
+              <>
+                <ExtendedImage
+                  src={props.src}
+                  alt={props.alt}
+                  className="py-2 rounded-lg lg:max-w-[600px] md:max-w-[480px] sm:max-w-[360px] mx-auto"
+                />
+                <span className="text-center text-sm text-gray-600 dark:text-gray-400 block">
+                  {props.alt}
+                </span>
+              </>
             );
+          },
+          ol(props) {
+            return (
+              <ol className="list-decimal list-inside" start={props.start}>
+                {props.children}
+              </ol>
+            );
+          },
+          ul(props) {
+            return <ul className="list-disc list-inside">{props.children}</ul>;
           },
         }}
       >
         {recipe.steps}
       </ReactMarkdown>
       <hr />
-      <h2 className="text-2xl font-bold py-4">Tips</h2>
-      <ReactMarkdown className="py-4 space-y-2">{recipe.tips}</ReactMarkdown>
+      <h2 className="text-3xl font-bold py-4" id="tips">
+        Tips
+      </h2>
+      <ReactMarkdown
+        className="py-4 space-y-4 list-decimal"
+        components={{
+          ol(props) {
+            return (
+              <ol className="list-decimal list-inside" start={props.start}>
+                {props.children}
+              </ol>
+            );
+          },
+          ul(props) {
+            return <ul className="list-disc list-inside">{props.children}</ul>;
+          },
+        }}
+      >
+        {recipe.tips}
+      </ReactMarkdown>
       {editorialButtons}
     </>
   );
