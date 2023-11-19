@@ -99,13 +99,13 @@ export default function Footer() {
             吃饭第一！（烤鹅说的）
           </p>
           <div className="py-8" aria-label="footer-brand-link">
-            <Link href="https://github.com/devers-platform">
+            <Link href="https://github.com/PassionPenguin">
               <FontAwesomeIcon
                 icon={faGithub}
                 className="h-5 w-5 align-middle"
               />
               <span className="hidden px-2 sm:inline-block">
-                Visit GitHub Project
+                Visit GitHub Profile
               </span>
             </Link>
           </div>
