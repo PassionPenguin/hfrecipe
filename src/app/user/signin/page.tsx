@@ -110,7 +110,7 @@ export default function SignIn({
               <p className="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
                 还不是用户？{" "}
                 <Link
-                  href="/src/app/user/register"
+                  href="/user/register"
                   className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
                 >
                   注册！
