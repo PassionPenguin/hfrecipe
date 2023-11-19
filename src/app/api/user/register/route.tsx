@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import {encodeSession, hashPassword, Session} from "@/lib/auth/auth";
+import { encodeSession, hashPassword, Session } from "@/lib/auth/auth";
 import nanoid from "@/lib/nanoid";
 import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 

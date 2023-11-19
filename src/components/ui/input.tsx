@@ -57,10 +57,7 @@ export function UIInput({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <label
-          htmlFor={name}
-          className="block text-sm font-medium leading-6"
-        >
+        <label htmlFor={name} className="block text-sm font-medium leading-6">
           {title}
         </label>
         <div className="text-sm">{hint}</div>
@@ -104,10 +101,7 @@ export function UITextarea({
   return (
     <div>
       <div className="flex items-center justify-between">
-        <label
-          htmlFor={name}
-          className="block text-sm font-medium leading-6"
-        >
+        <label htmlFor={name} className="block text-sm font-medium leading-6">
           {title}
         </label>
         <div className="text-sm">{hint}</div>
