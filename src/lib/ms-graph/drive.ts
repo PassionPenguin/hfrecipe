@@ -48,7 +48,7 @@ export class MSGraphDriveProvider {
     });
   }
 
-  async getDriveItemURL(path: string): Promise<string> {
+  async getDriveItemURL(path: string): Promise<string | null> {
     /// API endpoint: https://graph.microsoft.com/v1.0/users/{dsk-user-id}/drive/root:{path}/content
     /// Response: HTTP 302 Found Redirect
     /// See: https://learn.microsoft.com/en-us/graph/api/driveitem-get-content
@@ -65,7 +65,7 @@ export class MSGraphDriveProvider {
       },
     ).then(async (res) => {
       if (res.status != 200) {
-        throw new Error("Failed to get file url.");
+        return null;
       }
       return (await res.json())["@microsoft.graph.downloadUrl"];
     });

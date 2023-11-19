@@ -89,7 +89,6 @@ export const _protectedRoutes = [
   {
     type: PathPermission.User,
     matchers: [
-      RegExp(/\/(recipe|ingredient|tool)\/*/),
       RegExp(/\/user\/profile/),
       RegExp(/\/api\/(recipe|ingredient|cuisineType|tool)\/*/),
     ],
