@@ -20,7 +20,7 @@ export default async function RecipeHomePage({
         const tools = await prisma.tool.findMany({
             where: { deletedAt: null }
         });
-        body = <ToolList tools={tools} />;
+        body = <ToolList tools={tools} userType={checkUser.userType} />;
     }
     let editorialButtons = <></>;
     if (
