@@ -42,6 +42,7 @@ export default async function RecipeCreatePage({
             name="publicId"
             title={"Public ID"}
             defaultValue={recipe.publicId}
+            readOnly
           />
           <UIInput
             type={InputType.text}

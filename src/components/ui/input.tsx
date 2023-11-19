@@ -28,6 +28,8 @@ export function UIInput({
   name,
   title,
   hint,
+  defaultValue,
+  placeholder,
   prefix,
   suffix,
   ...props
@@ -37,12 +39,14 @@ export function UIInput({
     name: string;
     title: string;
     hint?: string;
+    defaultValue?: string | number;
+    placeholder?: string;
     prefix?: React.ReactElement;
     suffix?: React.ReactElement;
   } & React.InputHTMLAttributes<HTMLInputElement>
 >) {
   if (type === InputType.hidden) {
-    return <input type={type} name={name} value={props.value} readOnly />;
+    return <input type={type} name={name} value={defaultValue} readOnly />;
   } else if (type === InputType.submit) {
     return (
       <button
@@ -71,8 +75,8 @@ export function UIInput({
           name={name}
           id={name}
           className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6  dark:bg-slate-900"
-          placeholder={props.placeholder}
-          defaultValue={props.defaultValue}
+          placeholder={placeholder}
+          defaultValue={defaultValue}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           {suffix}

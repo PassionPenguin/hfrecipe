@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
       path = `/recipe/create/?state=false&msg=Failed%20submitting%20recipe`;
     }
   } catch (e: any) {
-    path = `/recipe/created/${data.publicId}?state=false&msg=${e.toString()}`;
+    path = `/recipe/created/?state=false&msg=${e.toString()}`;
   }
   revalidatePath(path);
   return NextResponse.redirect(origin + path, 303);
