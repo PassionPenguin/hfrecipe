@@ -1,8 +1,8 @@
 import prisma from "@/lib/prisma";
 import React from "react";
 import RecipeList from "./recipe-list";
-import { protectRoutes } from "@/lib/protectRoutes";
 import Frame from "@/components/frame/frame";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default async function RecipeHomePage({
   searchParams,
@@ -12,7 +12,7 @@ export default async function RecipeHomePage({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (!checkUser.status) {
     body = <>NO PERMISSION</>;
   } else {

@@ -1,9 +1,9 @@
 import Logo from "@/components/logo";
 import Link from "next/link";
-import { protectRoutes } from "@/lib/protectRoutes";
 import React from "react";
 import Frame from "@/components/frame/frame";
 import { redirect } from "next/navigation";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default function SignIn({
   searchParams,
@@ -13,17 +13,16 @@ export default function SignIn({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
-  console.log(checkUser);
+    checkUser = protectServerRoutes();
   if (checkUser.status && checkUser.userName !== null) {
     redirect("/");
   } else {
     body = (
       /*
-                [SIGN-IN SECTION]
+                      [SIGN-IN SECTION]
 
-                Sign-in page.
-            */
+                      Sign-in page.
+                  */
       <>
         <div className="mx-auto px-12 py-6 lg:w-[640px]">
           {/*

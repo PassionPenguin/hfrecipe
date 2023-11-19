@@ -1,8 +1,14 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
+import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  let checkStatus = protectAPIRoutes(req);
+  if (!checkStatus.status) {
+    return NextResponse.json({ error: "NO PERMISSION" });
+  }
+
   let formData = await req.formData();
 
   const data = {

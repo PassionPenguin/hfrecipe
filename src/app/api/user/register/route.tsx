@@ -1,10 +1,16 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { encodeSession, Session } from "@/lib/auth";
+import { encodeSession, Session } from "@/lib/auth/auth";
 import nanoid from "@/lib/nanoid";
+import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  let checkStatus = protectAPIRoutes(req);
+  if (!checkStatus.status) {
+    return NextResponse.json({ error: "NO PERMISSION" });
+  }
+
   let formData = await req.formData();
 
   const data = {
@@ -37,7 +43,6 @@ export async function POST(req: Request) {
         },
       });
 
-      console.log(result);
       if (result) {
         session = {
           id: id,

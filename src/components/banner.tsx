@@ -8,7 +8,7 @@ export default function Banner({
   state: boolean;
   msg: string;
 }) {
-  if (msg !== "undefined") {
+  if (msg !== "undefined" && msg !== "null") {
     return (
       <div
         className={

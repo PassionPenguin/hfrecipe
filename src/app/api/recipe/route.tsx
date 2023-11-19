@@ -1,10 +1,16 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 
-export async function GET(request: Request) {
+export async function GET(req: NextRequest) {
+  let checkStatus = protectAPIRoutes(req);
+  if (!checkStatus.status) {
+    return NextResponse.json({ error: "NO PERMISSION" });
+  }
+
   const result = await prisma.recipe.findUnique({
     where: {
-      publicId: request.headers.get("id"),
+      publicId: req.headers.get("id"),
     },
     include: {
       cuisineType: true,

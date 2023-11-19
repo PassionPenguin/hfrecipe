@@ -1,9 +1,15 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { encodeSession, Session } from "@/lib/auth";
+import { encodeSession, Session } from "@/lib/auth/auth";
+import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  let checkStatus = protectAPIRoutes(req);
+  if (!checkStatus.status) {
+    return NextResponse.json({ error: "NO PERMISSION" });
+  }
+
   let formData = await req.formData();
 
   const data = {
@@ -29,8 +35,6 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(result);
-
     if (result) {
       session = {
         id: result.publicId,
@@ -38,7 +42,7 @@ export async function POST(req: Request) {
         name: result.title,
         role: result.role,
         issued: Date.now(),
-        expires: 86400000,
+        expires: 1000 * 60 * 60 * 24 * 7 * 4,
       };
       path = `/?state=true&msg=Signed in as ${result.title}`;
     } else {
@@ -57,7 +61,7 @@ export async function POST(req: Request) {
       ).toUTCString()}`,
     };
   }
-  console.log(path, headers);
+
   revalidatePath(path);
   return NextResponse.redirect(origin + path, {
     status: 303,

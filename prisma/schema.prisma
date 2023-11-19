@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
@@ -19,21 +19,22 @@ model CuisineType {
 }
 
 model Ingredient {
-  publicId      String    @id(map: "ingredients_pk") @db.VarChar(12)
-  description   String
-  expensiveness Int?
-  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
-  deletedAt     DateTime? @db.Timestamptz(6)
-  title         String    @db.VarChar(31)
+  publicId          String              @id(map: "ingredients_pk") @db.VarChar(12)
+  description       String
+  expensiveness     Int?
+  createdAt         DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt         DateTime            @default(now()) @db.Timestamptz(6)
+  deletedAt         DateTime?           @db.Timestamptz(6)
+  title             String              @db.VarChar(31)
+  fRecipeIngredient fRecipeIngredient[]
 }
 
 model Recipe {
-  publicId           String      @id(map: "recipes_pk") @db.VarChar(12)
-  title              String      @db.VarChar(128)
+  publicId           String              @id(map: "recipes_pk") @db.VarChar(12)
+  title              String              @db.VarChar(128)
   description        String?
-  cuisineTypeId      String      @db.VarChar(12)
-  estimatedTime      String?     @db.VarChar(63)
+  cuisineTypeId      String              @db.VarChar(12)
+  estimatedTime      String?             @db.VarChar(63)
   servingsMultiplier Int
   rating             Int?
   deliciousness      Int?
@@ -41,23 +42,26 @@ model Recipe {
   tools              String?
   difficulty         Int?
   steps              String?
-  createdAt          DateTime    @default(now()) @db.Timestamptz(6)
-  updatedAt          DateTime    @default(now()) @db.Timestamptz(6)
-  deletedAt          DateTime?   @db.Timestamptz(6)
-  odCover            String?     @db.VarChar(256)
-  odVideo            String?     @db.VarChar(256)
+  createdAt          DateTime            @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime            @default(now()) @db.Timestamptz(6)
+  deletedAt          DateTime?           @db.Timestamptz(6)
+  odCover            String?             @db.VarChar(256)
+  odVideo            String?             @db.VarChar(256)
   tips               String?
-  cuisineType        CuisineType @relation(fields: [cuisineTypeId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "recipe_cuisine_type_public_id_fk")
+  cuisineType        CuisineType         @relation(fields: [cuisineTypeId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "recipe_cuisine_type_public_id_fk")
+  fRecipeIngredient  fRecipeIngredient[]
+  fRecipeTool        fRecipeTool[]
 }
 
 model Tool {
-  publicId      String    @id(map: "Tool_pk") @db.VarChar(12)
+  publicId      String        @id(map: "Tool_pk") @db.VarChar(12)
   description   String
   expensiveness Int?
-  createdAt     DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt     DateTime  @default(now()) @db.Timestamptz(6)
-  deletedAt     DateTime? @db.Timestamptz(6)
-  title         String    @db.VarChar(31)
+  createdAt     DateTime      @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime      @default(now()) @db.Timestamptz(6)
+  deletedAt     DateTime?     @db.Timestamptz(6)
+  title         String        @db.VarChar(31)
+  fRecipeTool   fRecipeTool[]
 }
 
 model User {
@@ -74,10 +78,12 @@ model User {
 }
 
 model fRecipeIngredient {
-  ingredientId String  @db.Char(12)
-  recipeId     String  @db.Char(12)
+  ingredientId String     @db.Char(12)
+  recipeId     String     @db.Char(12)
   amount       Int?
-  unit         String? @db.Bit(4)
+  unit         String?    @db.Bit(4)
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [publicId], onDelete: Cascade, map: "fRecipeIngredient_ingredientId_fk")
+  recipe       Recipe     @relation(fields: [recipeId], references: [publicId], onDelete: Cascade, map: "fRecipeIngredient_recipeId_fk")
 
   @@id([recipeId, ingredientId], map: "fRecipeIngredient_pk")
 }
@@ -87,6 +93,8 @@ model fRecipeTool {
   toolId   String  @db.Char(12)
   amount   Int?
   unit     String? @db.Bit(4)
+  recipe   Recipe  @relation(fields: [recipeId], references: [publicId], onDelete: Cascade, map: "fRecipeTool_recipeId_fk")
+  tool     Tool    @relation(fields: [toolId], references: [publicId], onDelete: Cascade, map: "fRecipeTool_toolId_fk")
 
   @@id([recipeId, toolId], map: "recipe_tool_pk")
 }

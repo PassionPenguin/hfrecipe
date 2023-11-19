@@ -1,9 +1,9 @@
 import Link from "next/link";
 import Dropdown from "@/components/dropdown";
 import prisma from "@/lib/prisma";
-import { protectRoutes } from "@/lib/protectRoutes";
 import Frame from "@/components/frame/frame";
 import React from "react";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default async function RecipeCreatePage({
   params,
@@ -17,7 +17,7 @@ export default async function RecipeCreatePage({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (!checkUser.status) {
     body = <>NO PERMISSION</>;
   } else {

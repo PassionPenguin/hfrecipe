@@ -1,9 +1,9 @@
 import { checkTokenStatus } from "./auth";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { UserRole } from "../app/user/usermodel";
+import { UserRole } from "@/app/user/usermodel";
 
-enum PathPermission {
+export enum PathPermission {
   None,
   SuperAdmin,
   Admin,
@@ -11,15 +11,19 @@ enum PathPermission {
   Guest,
 }
 
-export function protectRoutes(): {
+export function protectRoutes({
+  pathname,
+  token,
+}: {
+  pathname: string;
+  token: string;
+}): {
   status: boolean;
   userType: UserRole;
   userName: string | null;
 } {
-  const pathname = headers().get("X-PATHNAME") || "",
-    token = cookies().get("TOKEN") || "";
   let { status, name } = token
-    ? checkTokenStatus(token.value)
+    ? checkTokenStatus(token)
     : { status: UserRole.NotSignedIn, name: null };
   let permission = PathPermission.None;
   for (let route of _protectedRoutes) {
@@ -76,20 +80,18 @@ export const _protectedRoutes = [
   {
     type: PathPermission.SuperAdmin,
     matchers: [
-      RegExp(/\/recipe\/edit*/),
-      RegExp(/\/recipe\/create*/),
-      RegExp(/\/user\/edit*/),
-      RegExp(/\/user\/create*/),
+      RegExp(/\/recipe\/(edit|create)/),
+      RegExp(/\/user\/(edit|create)/),
+      RegExp(/\/api\/sql\/*/),
     ],
   },
   { type: PathPermission.Admin, matchers: [] },
   {
     type: PathPermission.User,
     matchers: [
-      RegExp(/\/recipe\/*/),
-      RegExp("/user/profile"),
-      RegExp(/\/ingredients\/*/),
-      RegExp(/\/tools\/*/),
+      RegExp(/\/(recipe|ingredient|tool)\/*/),
+      RegExp(/\/user\/profile/),
+      RegExp(/\/api\/(recipe|ingredient|cuisineType|tool)\/*/),
     ],
   },
   { type: PathPermission.Guest, matchers: [] },

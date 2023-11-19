@@ -1,5 +1,5 @@
 import { decode, encode, TAlgorithm } from "jwt-simple";
-import { decodeUserRole, UserRole } from "../app/user/usermodel";
+import { decodeUserRole, UserRole } from "@/app/user/usermodel";
 
 export interface Session {
   id: string;

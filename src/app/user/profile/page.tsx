@@ -1,10 +1,10 @@
 import { decodeUserRole, User, userAvatars } from "../usermodel";
 import Image from "next/image";
-import { protectRoutes } from "@/lib/protectRoutes";
 import prisma from "@/lib/prisma";
 import Frame from "@/components/frame/frame";
 import React from "react";
 import { redirect } from "next/navigation";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default async function UserProfile({
   searchParams,
@@ -14,11 +14,11 @@ export default async function UserProfile({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (checkUser.userName === null) {
     redirect("/user/signin");
   } else {
-    let userName = protectRoutes().userName;
+    let userName = checkUser.userName;
     let user: User;
     if (!userName && process.env.NODE_ENV == "development") {
       user = User.testData();

@@ -1,9 +1,9 @@
 import Logo from "@/components/logo";
 import Link from "next/link";
-import { protectRoutes } from "@/lib/protectRoutes";
 import { redirect } from "next/navigation";
 import Frame from "@/components/frame/frame";
 import React from "react";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default function Register({
   searchParams,
@@ -13,7 +13,7 @@ export default function Register({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (checkUser.status && checkUser.userName !== null) {
     redirect("/");
   } else {

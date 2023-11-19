@@ -1,11 +1,8 @@
 import prisma from "../lib/prisma";
 import React from "react";
-import RecipeItem from "./recipe/recipe-item";
 import RecipeList from "./recipe/recipe-list";
-import Header from "../components/frame/header";
-import Footer from "../components/frame/footer";
-import { protectRoutes } from "../lib/protectRoutes";
 import Frame from "../components/frame/frame";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default async function Home({
   params,
@@ -19,7 +16,7 @@ export default async function Home({
   };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (!checkUser.status) {
     body = <>NO PERMISSION</>;
   } else {

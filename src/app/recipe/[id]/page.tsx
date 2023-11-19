@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import RecipeDetail from "../recipe-detail";
-import { protectRoutes } from "@/lib/protectRoutes";
 import Frame from "@/components/frame/frame";
 import Loading, { LoadingSkeletonType } from "@/components/loading";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 
 export default async function RecipeDetailPage({
   params,
@@ -12,7 +12,7 @@ export default async function RecipeDetailPage({
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
   let body: React.ReactElement,
-    checkUser = protectRoutes();
+    checkUser = protectServerRoutes();
   if (!checkUser.status) {
     body = <>NO PERMISSION</>;
   } else {
