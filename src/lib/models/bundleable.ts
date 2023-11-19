@@ -1,4 +1,4 @@
 interface Bundleable {
-  publicId: string;
-  title: string;
+    publicId: string;
+    title: string;
 }

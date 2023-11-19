@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 .markdown {
-  ul {
-    list-style: disc;
-  }
+    ul {
+        list-style: disc;
+    }
 
-  ol {
-    list-style: decimal;
-  }
+    ol {
+        list-style: decimal;
+    }
 
-  li p {
-    display: inline-block;
-  }
+    li p {
+        display: inline-block;
+    }
 }

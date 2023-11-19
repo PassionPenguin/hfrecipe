@@ -1,17 +1,17 @@
 import { MSGraphClient } from "./ms-graph/client";
 
 export class HFApp {
-  public static initialized: boolean = false;
+    public static initialized: boolean = false;
 
-  public static ensureInitialized() {
-    if (!this.initialized) {
-      HFApp.init();
+    public static ensureInitialized() {
+        if (!this.initialized) {
+            HFApp.init();
+        }
     }
-  }
 
-  public static init() {
-    require("dotenv").config();
-    void new MSGraphClient();
-    HFApp.initialized = true;
-  }
+    public static init() {
+        require("dotenv").config();
+        void new MSGraphClient();
+        HFApp.initialized = true;
+    }
 }

@@ -2,15 +2,15 @@ import { UserRole } from "@/app/user/usermodel";
 import { protectRoutes } from "@/lib/auth/protectRoutes";
 
 export function protectClientRoutes({
-  pathname,
-  token,
+    pathname,
+    token
 }: {
-  pathname: string;
-  token: string;
+    pathname: string;
+    token: string;
 }): {
-  status: boolean;
-  userType: UserRole;
-  userName: string | null;
+    status: boolean;
+    userType: UserRole;
+    userName: string | null;
 } {
-  return protectRoutes({ pathname, token });
+    return protectRoutes({ pathname, token });
 }
