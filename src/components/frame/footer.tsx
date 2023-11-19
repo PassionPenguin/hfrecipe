@@ -63,7 +63,7 @@ const navigation = [
       },
       {
         name: "联系 Hoarfroster",
-        href: "/contact",
+        href: "/about#contact",
       },
     ],
   },
