@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { encodeSession, Session } from "@/lib/auth/auth";
+import {encodeSession, hashPassword, Session} from "@/lib/auth/auth";
 import nanoid from "@/lib/nanoid";
 import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
 
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
           publicId: id,
           email: data.email,
           title: data.name,
-          password: data.password,
+          password: await hashPassword(data.password),
         },
       });
 
@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     path = `/user/register?state=false&msg=${e.toString()}`;
   }
   if (session) {
-    let encodedSession = encodeSession(process.env.JWT_SECRET, session);
+    let encodedSession = encodeSession(process.env.CRYPTO_SALT, session);
     headers = {
       "Set-Cookie": `TOKEN=${
         encodedSession.token
