@@ -39,12 +39,12 @@ export async function POST(req: NextRequest) {
             }
         });
         if (result) {
-            path = `/recipe/${data.publicId}?state=true`;
+            path = `/tool/${data.publicId}?state=true`;
         } else {
-            path = `/recipe/create/?state=false&msg=Failed%20submitting%20recipe`;
+            path = `/tool/create/?state=false&msg=Failed%20submitting%20tool`;
         }
     } catch (e: any) {
-        path = `/recipe/create/?state=false&msg=${e.toString()}`;
+        path = `/tool/create/?state=false&msg=${e.toString()}`;
     }
     revalidatePath(path);
     return NextResponse.redirect(origin + path, 303);

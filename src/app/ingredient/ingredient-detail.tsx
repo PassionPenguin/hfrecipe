@@ -29,6 +29,7 @@ export default async function IngredientDetail({
                     Last modified <DateTime date={ingredient.updatedAt} />
                 </p>
             </div>
+            <div id="detail"></div>
         </>
     );
 

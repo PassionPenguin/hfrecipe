@@ -86,7 +86,8 @@ export const _protectedRoutes = [
         matchers: [
             RegExp(/\/recipe\/(edit|create)/),
             RegExp(/\/user\/(edit|create)/),
-            RegExp(/\/api\/sql\/*/)
+            RegExp(/\/api\/(sql|graph)\/*/),
+            RegExp(/\/graph*/)
         ]
     },
     { type: PathPermission.Admin, matchers: [] },

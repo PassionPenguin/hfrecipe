@@ -38,16 +38,7 @@ export default async function ToolDetailPage({
                     <p className="py-4 font-bold">On this page</p>
                     <div className="space-y-2">
                         <p className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                            <a href="#ingredients"> &gt; Ingredients</a>
-                        </p>
-                        <p className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                            <a href="#tools"> &gt; Tools</a>
-                        </p>
-                        <p className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                            <a href="#steps"> &gt; Steps</a>
-                        </p>
-                        <p className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100">
-                            <a href="#tips"> &gt; Tips</a>
+                            <a href="#detail"> &gt; Detail</a>
                         </p>
                     </div>
                 </div>

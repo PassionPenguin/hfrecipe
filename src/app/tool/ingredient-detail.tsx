@@ -29,6 +29,7 @@ export default async function ToolDetail({
                     modified <DateTime date={tool.updatedAt} />
                 </p>
             </div>
+            <div id="detail"></div>
         </>
     );
 

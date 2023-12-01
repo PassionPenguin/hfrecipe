@@ -3,21 +3,21 @@ import ExtendedImage from "@/components/ui/extended-image";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import { UserRole } from "../user/usermodel";
+import {UserRole} from "../user/usermodel";
 
-function parseIngredientUnit(unit: string) {
+function parseUnit(unit: string) {
     let reflect = [
-        { name: "g", id: "0000" },
-        { name: "mL", id: "0001" },
-        { name: "x", id: "0010" }
+        {name: "g", id: "0000"},
+        {name: "mL", id: "0001"},
+        {name: "x", id: "0010"}
     ];
     return reflect.find((e) => e.id === unit)?.name;
 }
 
 export default async function RecipeDetail({
-    recipeId,
-    userRole
-}: Readonly<{
+                                               recipeId,
+                                               userRole
+                                           }: Readonly<{
     recipeId: string;
     userRole: UserRole;
 }>) {
@@ -31,17 +31,19 @@ export default async function RecipeDetail({
                 select: {
                     ingredient: {
                         select: {
+                            publicId: true,
                             title: true
                         }
                     },
                     amount: true,
-                    unit: true
+                    unit: true,
                 }
             },
             fRecipeTool: {
                 select: {
                     tool: {
                         select: {
+                            publicId: true,
                             title: true
                         }
                     },
@@ -70,39 +72,43 @@ export default async function RecipeDetail({
                         {recipe.description}
                     </p>
                     <p className="text-gray-600 dark:text-gray-400">
-                        First published <DateTime date={recipe.createdAt} />,
-                        Last modified <DateTime date={recipe.updatedAt} />
+                        First published <DateTime date={recipe.createdAt}/>,
+                        Last modified <DateTime date={recipe.updatedAt}/>
                     </p>
                 </div>
             </>
         ),
         preparationSection = (
-            <>
-                <h2 className="py-4 text-3xl font-bold" id="ingredients">
-                    Ingredients
-                </h2>
-                <ul>
-                    {recipe.fRecipeIngredient.map((ingredient, index) => (
-                        <li key={index}>
-                            {ingredient.ingredient.title} {ingredient.amount}{" "}
-                            {parseIngredientUnit(ingredient.unit)}
-                        </li>
-                    ))}
-                </ul>
-                <h2 className="py-4 text-3xl font-bold" id="tools">
-                    Tools
-                </h2>
-                <ul>
-                    {recipe.fRecipeTool.map((tool, index) => (
-                        <li key={index}>
-                            {tool.tool.title}
-                            {index !== recipe.fRecipeTool.length - 1
-                                ? ", "
-                                : ""}
-                        </li>
-                    ))}
-                </ul>
-            </>
+            <div className="flex">
+                <div className="lg:flex-1">
+                    <h2 className="py-4 text-3xl font-bold" id="ingredients">
+                        Ingredients
+                    </h2>
+                    <ul>
+                        {recipe.fRecipeIngredient.map((ingredient) => (
+                            <li key={ingredient.ingredient.publicId}>
+                                <Link
+                                    href={"/ingredient/" + ingredient.ingredient.publicId}>{ingredient.ingredient.title}</Link>{" "}
+                                {ingredient.amount}{" "}{parseUnit(ingredient.unit)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="lg:flex-1">
+                    <h2 className="py-4 text-3xl font-bold" id="tools">
+                        Tools
+                    </h2>
+                    <ul>
+                        {recipe.fRecipeTool.map((tool) => (
+                            <li key={tool.tool.publicId}>
+                                <Link
+                                    href={"/tool/" + tool.tool.publicId}>{tool.tool.title}</Link>{" "}
+                                {tool.amount}{" "}{parseUnit(tool.unit)}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         );
 
     if (userRole === UserRole.NotSignedIn) {
@@ -111,7 +117,7 @@ export default async function RecipeDetail({
         return (
             <>
                 {titleSection}
-                <hr />
+                <hr/>
                 {preparationSection}
                 <h2 className="py-4 text-3xl font-bold" id="step">
                     Steps
@@ -151,7 +157,8 @@ export default async function RecipeDetail({
         editorialButtons = (
             <div className="pt-16">
                 <Link href={"/recipe/edit/" + recipe.publicId}>
-                    <button className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
+                    <button
+                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
                         Edit
                     </button>
                 </Link>
@@ -160,9 +167,9 @@ export default async function RecipeDetail({
     }
 
     return (
-        <>
+        <div className="max-w-6xl mx-auto">
             {titleSection}
-            <hr />
+            <hr/>
             {preparationSection}
             <h2 className="py-4 text-3xl font-bold" id="step">
                 Steps
@@ -188,7 +195,7 @@ export default async function RecipeDetail({
             >
                 {recipe.steps}
             </ReactMarkdown>
-            <hr />
+            <hr/>
             <h2 className="py-4 text-3xl font-bold" id="tips">
                 Tips
             </h2>
@@ -196,6 +203,6 @@ export default async function RecipeDetail({
                 {recipe.tips}
             </ReactMarkdown>
             {editorialButtons}
-        </>
+        </div>
     );
 }
