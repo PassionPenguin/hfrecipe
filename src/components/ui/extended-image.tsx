@@ -1,12 +1,12 @@
-import Loading, { LoadingSkeletonType } from "@/components/loading";
-import { MSGraphClient } from "@/lib/ms-graph/client";
-import { Suspense } from "react";
+import Loading, {LoadingSkeletonType} from "@/components/loading";
+import {MSGraphClient} from "@/lib/ms-graph/client";
+import {Suspense} from "react";
 
 async function ExtendedImage({
-    src,
-    alt,
-    className
-}: {
+                                 src,
+                                 alt,
+                                 className
+                             }: {
     src: string;
     alt: string;
     className: string;
@@ -17,7 +17,7 @@ async function ExtendedImage({
             .getDriveItemURL(src.replace("msgraph://", "/"))
             .then((result) => {
                 if (result !== null) {
-                    return <img src={result} alt={alt} className={className} />;
+                    return <img src={result} alt={alt} className={className}/>;
                 } else {
                     return <></>;
                 }
@@ -31,7 +31,7 @@ export default function LazyExtendedImage(props: {
     className: string;
 }) {
     return (
-        <Suspense fallback={<Loading type={LoadingSkeletonType.image} />}>
+        <Suspense fallback={<Loading type={LoadingSkeletonType.image}/>}>
             <ExtendedImage
                 src={props.src}
                 alt={props.alt}

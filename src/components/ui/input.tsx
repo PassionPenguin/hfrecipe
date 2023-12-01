@@ -1,4 +1,5 @@
 import React from "react";
+import UILabelSelect from "@/components/ui/uilabel";
 
 export enum InputType {
     text = "text",
@@ -20,20 +21,21 @@ export enum InputType {
     image = "image",
     range = "range",
     reset = "reset",
-    submit = "submit"
+    submit = "submit",
+    multilabels = "multilabels"
 }
 
 export function UIInput({
-    type,
-    name,
-    title,
-    hint,
-    defaultValue,
-    placeholder,
-    prefix,
-    suffix,
-    ...props
-}: Readonly<
+                            type,
+                            name,
+                            title,
+                            hint,
+                            defaultValue,
+                            placeholder,
+                            prefix,
+                            suffix,
+                            ...props
+                        }: Readonly<
     {
         type: InputType;
         name: string;
@@ -46,7 +48,7 @@ export function UIInput({
     } & React.InputHTMLAttributes<HTMLInputElement>
 >) {
     if (type === InputType.hidden) {
-        return <input type={type} name={name} value={defaultValue} readOnly />;
+        return <input type={type} name={name} value={defaultValue} readOnly/>;
     } else if (type === InputType.submit) {
         return (
             <button
@@ -57,6 +59,8 @@ export function UIInput({
                 {title}
             </button>
         );
+    } else if (type === InputType.multilabels) {
+        return <UILabelSelect defaultValue={defaultValue as string} name={name} title={title} />
     }
     return (
         <div>
@@ -90,13 +94,13 @@ export function UIInput({
 }
 
 export function UITextarea({
-    name,
-    title,
-    placeholder,
-    defaultValue,
-    hint,
-    ...props
-}: Readonly<
+                               name,
+                               title,
+                               placeholder,
+                               defaultValue,
+                               hint,
+                               ...props
+                           }: Readonly<
     {
         name: string;
         title: string;
@@ -120,7 +124,7 @@ export function UITextarea({
                 <textarea
                     name={name}
                     id={name}
-                    className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-slate-900 sm:text-sm sm:leading-6"
+                    className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20  ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-slate-900 sm:text-sm sm:leading-6 min-h-[10rem]"
                     placeholder={placeholder}
                     defaultValue={defaultValue}
                 />
