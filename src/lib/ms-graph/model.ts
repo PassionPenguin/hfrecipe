@@ -1,3 +1,14 @@
+interface MSGraphError {
+    error: MSGraphErrorBody;
+}
+
+interface MSGraphErrorBody {
+    code: string;
+    message: string;
+    innerError: MSGraphErrorBody;
+    details: MSGraphErrorBody[];
+}
+
 interface MSGraphBaseItem {
     id: string;
     name: string;
@@ -247,6 +258,8 @@ interface MSGraphThumbnail {
 interface MSGraphDriveItemVersion {}
 
 export type {
+    MSGraphError,
+    MSGraphErrorBody,
     MSGraphAlbum,
     MSGraphAudio,
     MSGraphBaseItem,

@@ -12,7 +12,7 @@ export class MSGraphAuthProvider {
     }
 
     async getToken(): Promise<string> {
-        if (this.expire < new Date()) {
+        if (this.expire < new Date() || this.token === undefined) {
             await this.updateAuthToken(MSGraphClient.secret);
         }
         return this.type + " " + this.token;

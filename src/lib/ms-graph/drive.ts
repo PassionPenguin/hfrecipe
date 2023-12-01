@@ -1,5 +1,5 @@
 import { MSGraphClient } from "./client";
-import { MSGraphDriveItem } from "./model";
+import {MSGraphDriveItem, MSGraphError} from "./model";
 
 export class MSGraphDriveProvider {
     dskUserID: string;
@@ -8,7 +8,7 @@ export class MSGraphDriveProvider {
         this.dskUserID = MSGraphClient.secret.dskUserID;
     }
 
-    async getDriveItem(path: string): Promise<MSGraphDriveItem> {
+    async getDriveItem(path: string): Promise<MSGraphDriveItem | MSGraphError> {
         /// API endpoint: https://graph.microsoft.com/v1.0/users/{dsk-user-id}/drive/root:{path}
         /// Response: DriveItem
         /// See: https://learn.microsoft.com/en-us/graph/api/driveitem-get
@@ -23,7 +23,7 @@ export class MSGraphDriveProvider {
                 }
             }
         ).then(async (res) => {
-            return (await res.json()) as MSGraphDriveItem;
+            return (await res.json()) as MSGraphDriveItem | MSGraphError;
         });
     }
 
@@ -67,6 +67,30 @@ export class MSGraphDriveProvider {
                 return null;
             }
             return (await res.json())["@microsoft.graph.downloadUrl"];
+        });
+    }
+
+    async uploadDriveItem(path: string, content: any): Promise<MSGraphDriveItem | MSGraphError> {
+        /// API endpoint: https://graph.microsoft.com/v1.0/users/{dsk-user-id}/drive/root:{path}:/content
+        /// Response: DriveItem
+        /// See: https://learn.microsoft.com/en-us/graph/api/driveitem-put-content
+        return await fetch(
+            "https://graph.microsoft.com/v1.0/users/" +
+                this.dskUserID +
+                "/drive/root:" +
+                path +
+                ":/content",
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: await MSGraphClient.authProvider.getToken(),
+                    'Content-Type': 'application/octet-stream'
+                },
+                body: content,
+                duplex: 'half'
+            }
+        ).then(async (res) => {
+            return (await res.json()) as MSGraphDriveItem | MSGraphError;
         });
     }
 }
