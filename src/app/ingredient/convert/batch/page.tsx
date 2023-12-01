@@ -115,7 +115,7 @@ export default function IngredientBatchConvert() {
                         type={InputType.hidden}
                         name="inserts"
                         title="Inserts"
-                        value={inserts}
+                        defaultValue={inserts}
                     />
                     <pre>
                         <code>{inserts}</code>
