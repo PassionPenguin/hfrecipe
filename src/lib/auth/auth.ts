@@ -116,13 +116,14 @@ function decodeSession(secretKey: string, tokenString: string): DecodeResult {
 export function checkTokenStatus(tokenString: string): {
     status: UserRole;
     name: string | null;
+    id: string | null;
 } {
     let result = decodeSession(process.env.CRYPTO_SALT, tokenString);
     if (result.type === "valid") {
         let session = result.session;
-        return { status: decodeUserRole(session.role), name: session.name };
+        return { status: decodeUserRole(session.role), name: session.name, id: session.id };
     } else {
-        return { status: UserRole.NotSignedIn, name: null };
+        return { status: UserRole.NotSignedIn, name: null, id: null };
     }
 }
 

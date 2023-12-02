@@ -51,6 +51,7 @@ model Recipe {
   cuisineType        CuisineType         @relation(fields: [cuisineTypeId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "recipe_cuisine_type_public_id_fk")
   fRecipeIngredient  fRecipeIngredient[]
   fRecipeTool        fRecipeTool[]
+  fUserRecipeLikes   fUserRecipeLikes[]
 }
 
 model Tool {
@@ -65,16 +66,17 @@ model Tool {
 }
 
 model User {
-  publicId  String    @id(map: "user_pk") @db.Char(12)
-  title     String    @unique(map: "user_name_pk") @db.VarChar(16)
-  password  String    @db.VarChar(64)
-  email     String    @db.VarChar(64)
-  role      String    @default("01") @db.Bit(2)
-  avatar    String    @default("01") @db.Bit(2)
-  bio       String?   @db.VarChar(256)
-  createdAt DateTime  @default(now()) @db.Timestamptz(6)
-  updatedAt DateTime  @default(now()) @db.Timestamptz(6)
-  deletedAt DateTime? @db.Timestamptz(6)
+  publicId         String             @id(map: "user_pk") @db.Char(12)
+  title            String             @unique(map: "user_name_pk") @db.VarChar(16)
+  password         String             @db.VarChar(64)
+  email            String             @db.VarChar(64)
+  role             String             @default("01") @db.Bit(2)
+  avatar           String             @default("01") @db.Bit(2)
+  bio              String?            @db.VarChar(256)
+  createdAt        DateTime           @default(now()) @db.Timestamptz(6)
+  updatedAt        DateTime           @default(now()) @db.Timestamptz(6)
+  deletedAt        DateTime?          @db.Timestamptz(6)
+  fUserRecipeLikes fUserRecipeLikes[]
 }
 
 model fRecipeIngredient {
@@ -102,4 +104,14 @@ model fRecipeTool {
 model UserCode {
   code    String  @unique(map: "UserCode_pk") @db.Char(12)
   expired Boolean @default(false)
+}
+
+model fUserRecipeLikes {
+  recipeId String @db.Char(12)
+  userId   String @db.Char(12)
+  Recipe   Recipe @relation(fields: [recipeId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "fUserRecipeLikes_Recipe_publicId_fk")
+  User     User   @relation(fields: [userId], references: [publicId], onDelete: NoAction, onUpdate: NoAction, map: "fUserRecipeLikes_User_publicId_fk")
+
+  @@id([recipeId, userId], map: "fUserRecipeLikes_pk")
+  @@unique([recipeId, userId], map: "fUserRecipeLikes_pk2")
 }

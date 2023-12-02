@@ -4,6 +4,7 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import {UserRole} from "../user/usermodel";
+import UserContentActions from "@/components/userContentActions";
 
 function parseUnit(unit: string) {
     let reflect = [
@@ -16,10 +17,12 @@ function parseUnit(unit: string) {
 
 export default async function RecipeDetail({
                                                recipeId,
-                                               userRole
+                                               userRole,
+                                               userId
                                            }: Readonly<{
     recipeId: string;
     userRole: UserRole;
+    userId: string;
 }>) {
     const recipe = await prisma.recipe.findUnique({
         where: {
@@ -50,9 +53,20 @@ export default async function RecipeDetail({
                     amount: true,
                     unit: true
                 }
-            }
+            },
+            fUserRecipeLikes: userId != null ? {
+                where: {
+                    userId: userId
+                }
+            } : {}
         }
     });
+    let recipeLikeCount = await prisma.fUserRecipeLikes.count({
+        where: {
+            recipeId: recipeId
+        }
+    });
+
     let titleSection = (
             <>
                 {recipe.odCover !== null ? (
@@ -203,6 +217,7 @@ export default async function RecipeDetail({
                 {recipe.tips}
             </ReactMarkdown>
             {editorialButtons}
+            <UserContentActions userId={userId} recipeId={recipe.publicId} currentLikeState={recipe.fUserRecipeLikes} currentLikeCount={recipeLikeCount}/>
         </div>
     );
 }

@@ -30,6 +30,7 @@ export default async function RecipeDetailPage({
                             <RecipeDetail
                                 recipeId={params.id}
                                 userRole={checkUser.userType}
+                                userId={checkUser.userId}
                             />
                         </Suspense>
                     </div>

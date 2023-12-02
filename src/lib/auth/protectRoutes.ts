@@ -19,10 +19,11 @@ export function protectRoutes({
     status: boolean;
     userType: UserRole;
     userName: string | null;
+    userId: string | null;
 } {
-    let { status, name } = token
+    let { status, name, id } = token
         ? checkTokenStatus(token)
-        : { status: UserRole.NotSignedIn, name: null };
+        : { status: UserRole.NotSignedIn, name: null, id: null };
     let permission = PathPermission.None;
     for (let route of _protectedRoutes) {
         if (
@@ -32,13 +33,14 @@ export function protectRoutes({
         }
     }
     if (permission === PathPermission.None)
-        return { status: true, userType: status, userName: name };
+        return { status: true, userType: status, userName: name, userId: id };
     else {
         if (!token) {
             return {
                 status: false,
                 userType: UserRole.NotSignedIn,
-                userName: null
+                userName: null,
+                userId: null
             };
         } else {
             switch (status) {
@@ -46,19 +48,20 @@ export function protectRoutes({
                     return {
                         status: false,
                         userType: UserRole.NotSignedIn,
-                        userName: null
+                        userName: null,
+                        userId: null
                     };
                 case UserRole.SuperAdmin:
                     return {
                         status: true,
                         userType: UserRole.SuperAdmin,
-                        userName: name
+                        userName: name, userId: id
                     };
                 case UserRole.Admin:
                     return {
                         status: permission !== PathPermission.SuperAdmin,
                         userType: UserRole.Admin,
-                        userName: name
+                        userName: name, userId: id
                     };
                 case UserRole.User:
                     return {
@@ -66,13 +69,13 @@ export function protectRoutes({
                             permission !== PathPermission.SuperAdmin &&
                             permission !== PathPermission.Admin,
                         userType: UserRole.User,
-                        userName: name
+                        userName: name, userId: id
                     };
                 case UserRole.Guest:
                     return {
                         status: permission === PathPermission.Guest,
                         userType: UserRole.User,
-                        userName: name
+                        userName: name, userId: id
                     };
             }
         }

@@ -20,10 +20,26 @@ export default async function RecipeHomePage({
         body = <>NO PERMISSION</>;
     } else {
         const recipes = await prisma.recipe.findMany({
+            take: 10,
             where: { deletedAt: null },
-            include: { cuisineType: true }
+            include: { cuisineType: true },
+            orderBy: {
+                updatedAt: "desc"
+            }
+        }), trendingRecipes = await prisma.recipe.findMany({
+            take: 10,
+            where: { deletedAt: null },
+            include: { cuisineType: true },
+            orderBy: {
+                fUserRecipeLikes: {
+                    _count: "desc"
+                }
+            }
         });
-        body = <RecipeList recipes={recipes} />;
+        body = <>
+            <RecipeList recipes={recipes} title="Recent Recipes"/>
+            <RecipeList recipes={trendingRecipes} title="Trending Recipes" />
+            </>;
     }
     let editorialButtons = <></>;
     if (

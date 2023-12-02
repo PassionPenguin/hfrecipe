@@ -6,6 +6,7 @@ export function protectServerRoutes(): {
     status: boolean;
     userType: UserRole;
     userName: string | null;
+    userId: string | null;
 } {
     return protectRoutes({
         pathname: headers().get("X-PATHNAME") || "",
