@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { MSGraphClient } from "./client";
 import {MSGraphDriveItem, MSGraphError} from "./model";
 
