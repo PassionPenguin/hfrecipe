@@ -11,7 +11,6 @@ async function ExtendedImage({
     alt: string;
     className: string;
 }) {
-    console.log(src.startsWith("msgraph://"), src, alt, className);
     if (src.startsWith("https://msgraph.hoarfroster.space/")) {
         return MSGraphClient.driveProvider
             .getDriveItemURL(src.replace("https://msgraph.hoarfroster.space/", "/"))
