@@ -5,6 +5,7 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import {UserRole} from "../user/usermodel";
 import UserContentActions from "@/components/userContentActions";
+import LazyExtendedImage from "@/components/ui/extended-image";
 
 function parseUnit(unit: string) {
     let reflect = [
@@ -142,7 +143,7 @@ export default async function RecipeDetail({
                         img(props) {
                             return (
                                 <>
-                                    <ExtendedImage
+                                    <LazyExtendedImage
                                         src={props.src}
                                         alt={props.alt}
                                         className="mx-auto rounded-lg py-2 sm:max-w-[360px] md:max-w-[480px] lg:max-w-[600px]"
@@ -194,7 +195,7 @@ export default async function RecipeDetail({
                     img(props) {
                         return (
                             <>
-                                <ExtendedImage
+                                <LazyExtendedImage
                                     src={props.src}
                                     alt={props.alt}
                                     className="mx-auto rounded-lg py-2 sm:max-w-[360px] md:max-w-[480px] lg:max-w-[600px]"
@@ -217,6 +218,7 @@ export default async function RecipeDetail({
                 {recipe.tips}
             </ReactMarkdown>
             {editorialButtons}
+            <div className="my-8" />
             <UserContentActions userId={userId} recipeId={recipe.publicId} currentLikeState={recipe.fUserRecipeLikes} currentLikeCount={recipeLikeCount}/>
         </div>
     );

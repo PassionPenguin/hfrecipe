@@ -1,14 +1,15 @@
 import Frame from "@/components/frame/frame";
-import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
+import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 import React from "react";
-import { decodeUserRole, User, userAvatars } from "../usermodel";
+import {decodeUserRole, User, userAvatars} from "../usermodel";
+import {RecipeItem} from "@/app/recipe/recipe-item";
 
 export default async function UserProfile({
-    searchParams
-}: {
+                                              searchParams
+                                          }: {
     searchParams?: {
         [key: string]: string | string[] | undefined;
     };
@@ -34,6 +35,18 @@ export default async function UserProfile({
             } else user = User.empty();
         }
         let avatar = userAvatars.find((e) => e.avatar == user.avatar)!;
+        let recipes = await prisma.recipe.findMany({
+            where: {
+                fUserRecipeLikes: {
+                    some: {
+                        userId: checkUser.userId
+                    }
+                }
+            },
+            include: {
+                cuisineType: true
+            }
+        });
         body = (
             <>
                 <div className="relative mx-auto my-8 flex max-w-6xl rounded bg-white px-8 py-4 dark:bg-slate-900">
@@ -53,18 +66,22 @@ export default async function UserProfile({
                         <div className="space-y-2 text-gray-600 dark:text-gray-400">
                             <p>
                                 <span className="inline-block w-[128px]">
-                                    唯一识别符 ID
+                                    Unique Identifier
                                 </span>
                                 <span>{user.publicId}</span>
                             </p>
                             <p>
                                 <span className="inline-block w-[128px]">
-                                    个人简介
+                                    Bio
                                 </span>
                                 <span>{user.bio}</span>
                             </p>
                         </div>
                     </div>
+                </div>
+                <div className="content">
+                    <h2 className="font-bold text-4xl">My Collection</h2>
+                    {recipes.map(recipe => <RecipeItem recipe={recipe}/>)}
                 </div>
             </>
         );

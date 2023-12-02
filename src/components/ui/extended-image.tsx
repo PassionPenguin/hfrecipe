@@ -11,10 +11,10 @@ async function ExtendedImage({
     alt: string;
     className: string;
 }) {
-    if (src.startsWith("msgraph://")) {
-        // Assuming MSGraphClient.getFileDownloadURL returns a promise
+    console.log(src.startsWith("msgraph://"), src, alt, className);
+    if (src.startsWith("https://msgraph.hoarfroster.space/")) {
         return MSGraphClient.driveProvider
-            .getDriveItemURL(src.replace("msgraph://", "/"))
+            .getDriveItemURL(src.replace("https://msgraph.hoarfroster.space/", "/"))
             .then((result) => {
                 if (result !== null) {
                     return <img src={result} alt={alt} className={className}/>;
