@@ -1,15 +1,15 @@
-import {protectAPIRoutes} from "@/lib/auth/protectAPIRoutes";
-import prisma from "@/lib/prisma";
-import {NextRequest, NextResponse} from "next/server";
-import {MSGraphClient} from "@/lib/ms-graph/client";
+import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
+import { MSGraphClient } from "@/lib/ms-graph/client";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: NextRequest) {
     let checkStatus = protectAPIRoutes(req);
     if (!checkStatus.status) {
-        return NextResponse.json({error: "NO PERMISSION"});
+        return NextResponse.json({ error: "NO PERMISSION" });
     }
 
-    const file = req.body, name = req.nextUrl.searchParams.get("name");
+    const file = req.body,
+        name = req.nextUrl.searchParams.get("name");
 
     // Read the file stream into a buffer
     const fileBuffer = await streamToBuffer(file);
@@ -19,19 +19,21 @@ export async function PUT(req: NextRequest) {
         start(controller) {
             controller.enqueue(fileBuffer);
             controller.close();
-        },
+        }
     });
     try {
-        new MSGraphClient();
-        let result = await MSGraphClient.driveProvider.uploadDriveItem("/hfsitedata/rcphf/" + name, bufferStream);
+        let result = await MSGraphClient.driveProvider.uploadDriveItem(
+            "/hfsitedata/rcphf/" + name,
+            bufferStream
+        );
         if (result != undefined && !("error" in result)) {
-            return NextResponse.json({success: true});
+            return NextResponse.json({ success: true });
         } else {
-            return NextResponse.json({success: false});
+            return NextResponse.json({ success: false });
         }
-    }catch(e) {
+    } catch (e) {
         console.log(e);
-        return NextResponse.json({success: false});
+        return NextResponse.json({ success: false });
     }
 }
 
