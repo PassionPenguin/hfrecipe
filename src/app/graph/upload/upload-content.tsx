@@ -1,12 +1,13 @@
 "use client";
 
 import {useRef, useState} from "react";
-import {MSGraphDriveProvider} from "@/lib/ms-graph/drive";
-import {MSGraphClient} from "@/lib/ms-graph/client";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faClose} from "@fortawesome/free-solid-svg-icons";
+import nanoid from "@/lib/nanoid";
 
 interface UploadContentProps {
-    file: File,
-    status: string
+    file: File;
+    status: string;
 }
 
 export default function UploadContent() {
@@ -18,9 +19,16 @@ export default function UploadContent() {
         e.preventDefault();
         console.log("File has been added");
         if (e.target.files && e.target.files[0]) {
-            console.log(e.target.files);
             for (let i = 0; i < e.target.files["length"]; i++) {
-                setFiles((prevState: any) => [...prevState, {file: e.target.files[i], status: "pending"}]);
+                let id = nanoid({length: 12}), originalFile = e.target.files[i],
+                    f = new File([originalFile], id + "." +  originalFile.name.split(".").pop(), {
+                        type: originalFile.type,
+                        lastModified: originalFile.lastModified,
+                    });
+                setFiles((prevState: any) => [
+                    ...prevState,
+                    {file: f, status: "pending"}
+                ]);
             }
         }
     }
@@ -30,13 +38,17 @@ export default function UploadContent() {
             // no file has been submitted
         } else {
             files.forEach(async (f) => {
-                let result = await fetch("/api/graph/upload?name=" + f.file.name, {
-                    method: "PUT",
-                    body: f.file
-                });
+                let result = await fetch(
+                    "/api/graph/upload?name=" + f.file.name,
+                    {
+                        method: "PUT",
+                        body: f.file
+                    }
+                );
                 setFiles((prevState: any) => {
                     let newArr = [...prevState];
-                    newArr[prevState.indexOf(f)].status = result.status === 200 ? "success" : "failed";
+                    newArr[prevState.indexOf(f)].status =
+                        result.status === 200 ? "success" : "failed";
                     return newArr;
                 });
             });
@@ -49,7 +61,15 @@ export default function UploadContent() {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             for (let i = 0; i < e.dataTransfer.files["length"]; i++) {
-                setFiles((prevState: any) => [...prevState, e.dataTransfer.files[i]]);
+                let id = nanoid({length: 12}), originalFile = e.dataTransfer.files[i],
+                    f = new File([originalFile], id + "." + originalFile.name.split(".").pop(), {
+                        type: originalFile.type,
+                        lastModified: originalFile.lastModified,
+                    });
+                setFiles((prevState: any) => [
+                    ...prevState,
+                    {file: f, status: "pending"}
+                ]);
             }
         }
     }
@@ -85,11 +105,13 @@ export default function UploadContent() {
     }
 
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="flex h-screen items-center justify-center">
             <form
                 className={`${
-                    dragActive ? "bg-slate-400 dark:bg-slate-600" : "bg-slate-100 dark:bg-slate-900"
-                }  p-4 w-1/3 rounded-lg  min-h-[10rem] text-center flex flex-col items-center justify-center`}
+                    dragActive
+                        ? "bg-slate-400 dark:bg-slate-600"
+                        : "bg-slate-100 dark:bg-slate-900"
+                }  flex min-h-[10rem] w-full max-w-[1080px] mx-auto flex-col items-center justify-center rounded-lg px-8 py-4 text-center`}
                 onDragEnter={handleDragEnter}
                 onSubmit={(e) => e.preventDefault()}
                 onDrop={handleDrop}
@@ -110,37 +132,55 @@ export default function UploadContent() {
                 <p>
                     Drag & Drop files or{" "}
                     <span
-                        className="font-bold text-blue-600 dark:text-blue-400 cursor-pointer"
+                        className="cursor-pointer font-bold text-blue-600 dark:text-blue-400"
                         onClick={openFileExplorer}
                     >
-            <u>Select files</u>
-          </span>{" "}
+                        <u>Select files</u>
+                    </span>{" "}
                     to upload
                 </p>
 
-                <div className="flex flex-col items-center p-3">
+                <div className="flex flex-wrap flex-row items-center p-3">
                     {files.map((file: any, idx: any) => (
-                        <div key={idx} className="flex flex-row space-x-5">
-                            <span>{file.file.name}</span>
-                            <span
-                                className="text-red-500 cursor-pointer"
-                                onClick={() => removeFile(file.file.name, idx)}
-                            >
-                remove
-              </span>
-                            <span
-                                className={file.status === "pending" ? "text-blue-400 dark:text-blue-600" : file.status === "success" ? "text-green-400 dark:text-green-600" : "text-red-400 dark:text-red-600"}>
-                                {file.status === "pending" ? "pending" : file.status === "success" ? "success" : "failed"}
+                        <div key={idx}
+                             className="flex flex-col w-[33.33%] lg:w-[25%] aspect-square align-middle justify-start">
+                            <div className="flex-row space-x-2">
+                                <span>{file.file.name}</span>
+                                <span
+                                    className={
+                                        "select-none " +
+                                        (file.status === "pending"
+                                            ? "text-blue-600 dark:text-blue-400"
+                                            : file.status === "success"
+                                                ? "text-green-600 dark:text-green-400"
+                                                : "text-red-600 dark:text-red-400")
+                                    }
+                                >
+                                {file.status === "pending"
+                                    ? "Pending..."
+                                    : file.status === "success"
+                                        ? "Success"
+                                        : "Failed"}
                             </span>
+                                <FontAwesomeIcon icon={faClose}
+                                                 className="cursor-pointer text-red-600 dark:text-red-400"
+                                                 onClick={() => removeFile(file.file.name, idx)}/>
+                            </div>
+                            <div className="">
+                                <img src={file.file ? URL.createObjectURL(file.file) : ""} alt={"preview-" + idx}
+                                     className="w-full h-full object-contain"/>
+                            </div>
                         </div>
                     ))}
                 </div>
 
                 <button
-                    className="bg-slate-800 dark:bg-slate-200 rounded-lg p-2 mt-3 w-auto"
+                    className="mt-3 w-auto rounded-lg bg-slate-800 p-2 dark:bg-slate-200"
                     onClick={handleSubmitFile}
                 >
-                    <span className="p-2 dark:text-black text-white font-bold">Submit</span>
+                    <span className="p-2 font-bold text-white dark:text-black">
+                        Submit
+                    </span>
                 </button>
             </form>
         </div>
