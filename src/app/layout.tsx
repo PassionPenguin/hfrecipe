@@ -14,6 +14,9 @@ HFApp.ensureInitialized();
 export default function Layout({ children }) {
     return (
         <html lang="en">
+            <head>
+                <meta name="google-adsense-account" content="ca-pub-2275811890061218" />
+            </head>
             <body className="text-gray-800 dark:bg-slate-800 dark:text-gray-200">
                 <Suspense
                     fallback={<Loading type={LoadingSkeletonType.text} />}
