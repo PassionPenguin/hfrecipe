@@ -44,11 +44,11 @@ export default function UploadContent() {
                         method: "PUT",
                         body: f.file
                     }
-                );
+                ), json = await result.json();
                 setFiles((prevState: any) => {
                     let newArr = [...prevState];
                     newArr[prevState.indexOf(f)].status =
-                        result.status === 200 ? "success" : "failed";
+                        json["success"] ? "success" : "failed";
                     return newArr;
                 });
             });
