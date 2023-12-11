@@ -5,6 +5,7 @@ import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
+import MarkdownEditor from "@/components/ui/editor";
 
 export default async function RecipeCreatePage({
     params,
@@ -70,15 +71,14 @@ export default async function RecipeCreatePage({
                         placeholder="Servings Multiplier..."
                         hint="Servings per ingredients amounts"
                     />
-                    <UITextarea
-                        name="steps"
-                        title="Steps"
-                        defaultValue={recipe.steps}
-                    />
-                    <UITextarea
-                        name="tips"
-                        title="Tips"
-                        defaultValue={recipe.tips}
+                    <MarkdownEditor source={recipe.steps} id="steps" title="Steps" />
+                    <MarkdownEditor source={recipe.tips} id="tips" title="Tips" />
+                    <UIInput
+                        type={InputType.text}
+                        name="odCover"
+                        title="Cover Image"
+                        placeholder="https://..."
+                        defaultValue={recipe.odCover}
                     />
                     <Dropdown
                         _selected={recipe.cuisineType}

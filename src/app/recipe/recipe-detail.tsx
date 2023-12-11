@@ -177,6 +177,18 @@ export default async function RecipeDetail({
                         Edit
                     </button>
                 </Link>
+                <Link href={"/ingredient/convert/batch/" + recipe.publicId}>
+                    <button
+                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
+                        Edit Ingredients
+                    </button>
+                </Link>
+                <Link href={"/tool/convert/batch/" + recipe.publicId}>
+                    <button
+                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
+                        Edit Tool
+                    </button>
+                </Link>
             </div>
         );
     }

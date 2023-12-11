@@ -5,7 +5,6 @@ import ClientFrame from "@/components/frame/clientFrame";
 import Loading, { LoadingSkeletonType } from "@/components/loading";
 import { InputType, UIInput, UITextarea } from "@/components/ui/input";
 import { protectClientRoutes } from "@/lib/auth/protectClientRoutes";
-import nanoid from "@/lib/nanoid";
 import Cookies from "js-cookie";
 import {
     ReadonlyURLSearchParams,
@@ -14,8 +13,8 @@ import {
 } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export default function ToolBatchCreate() {
-    const [tools, setTools] = useState([]);
+export default function IngredientBatchConvert({params}: {params: { id: string }}) {
+    const [ingredients, setIngredients] = useState([]);
     const [inserts, setInserts] = useState("");
     let body: React.ReactElement;
     const [checkUser, setCheckUser] = useState({
@@ -34,10 +33,17 @@ export default function ToolBatchCreate() {
                 token: Cookies.get("TOKEN")
             })
         );
-        fetch("/api/tool/list").then((response) => {
+        fetch("/api/ingredient/list").then((response) => {
             if (response.ok) {
                 response.json().then((data) => {
-                    setTools(data);
+                    setIngredients(data);
+                });
+            }
+        });
+        fetch("/api/recipe/" + params.id + "/ingredients").then((response) => {
+            if (response.ok) {
+                response.json().then((data) => {
+                    console.log(data);
                 });
             }
         });
@@ -59,11 +65,11 @@ export default function ToolBatchCreate() {
                 m = s.exec(e);
             if (m === null) return;
             try {
-                if (tools.find((df) => df.title === m[1]) === undefined) {
-                    r += `INSERT INTO public."Tool" ("publicId", description, title) VALUES ('${nanoid(
-                        { length: 12 }
-                    )}', '', '${m[1].replaceAll("'", "''")}');\n`;
-                }
+                r += `INSERT INTO public."fRecipeIngredient" ("ingredientId", "recipeId", amount, unit) VALUES ('${
+                    ingredients.find((df) => df.title === m[1]).publicId
+                }', '${rId}', ${m[2]}, B'${
+                    units.find((uf) => uf.name === m[3]).id
+                }');\n`;
             } catch (e) {
                 setLog(log + "\n" + e.toString());
             }
@@ -87,12 +93,19 @@ export default function ToolBatchCreate() {
         });
     }
 
-    if (tools.length === 0) {
+    if (ingredients.length === 0) {
         body = <Loading type={LoadingSkeletonType.text} />;
     } else {
         body = (
             <>
                 <form action={generateInserts} className="space-y-4">
+                    <UIInput
+                        type={InputType.text}
+                        name="rId"
+                        title="Recipe ID"
+                        hint="12 chars NanoID"
+                        defaultValue={params.id}
+                    />
                     <UITextarea
                         name="input"
                         title="Original relationships"

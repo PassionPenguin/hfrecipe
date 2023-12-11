@@ -5,7 +5,6 @@ import ClientFrame from "@/components/frame/clientFrame";
 import Loading, { LoadingSkeletonType } from "@/components/loading";
 import { InputType, UIInput, UITextarea } from "@/components/ui/input";
 import { protectClientRoutes } from "@/lib/auth/protectClientRoutes";
-import nanoid from "@/lib/nanoid";
 import Cookies from "js-cookie";
 import {
     ReadonlyURLSearchParams,
@@ -13,8 +12,9 @@ import {
     useSearchParams
 } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import nanoid from "@/lib/nanoid";
 
-export default function ToolBatchCreate() {
+export default function ToolBatchConvert({params}: {params: {id: string}}) {
     const [tools, setTools] = useState([]);
     const [inserts, setInserts] = useState("");
     let body: React.ReactElement;
@@ -43,26 +43,19 @@ export default function ToolBatchCreate() {
         });
     }, []);
 
-    function generateInserts(fd: FormData) {
-        let rId = fd.get("rId") as string,
-            input = fd.get("input") as string;
 
-        const units = [
-            { name: "g", id: "0000" },
-            { name: "mL", id: "0001" },
-            { name: "x", id: "0010" }
-        ];
+    function generateInserts(fd: FormData) {
+        let input = fd.get("input") as string;
         let r = "";
 
         input.split("|").forEach((e) => {
-            const s = new RegExp(/(.+?)-(\d+)(.+?)$/g),
+            const s = new RegExp(/(.+?)-(.+?)$/g),
                 m = s.exec(e);
             if (m === null) return;
             try {
                 if (tools.find((df) => df.title === m[1]) === undefined) {
-                    r += `INSERT INTO public."Tool" ("publicId", description, title) VALUES ('${nanoid(
-                        { length: 12 }
-                    )}', '', '${m[1].replaceAll("'", "''")}');\n`;
+                    let id = nanoid({length: 12})
+                    r += `INSERT INTO public."Tool" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll("'", "''")}', '${m[1].replaceAll("'", "''")}');\n`;
                 }
             } catch (e) {
                 setLog(log + "\n" + e.toString());
@@ -74,7 +67,6 @@ export default function ToolBatchCreate() {
     function execInserts() {
         let fd = new FormData();
         fd.set("ddl", inserts);
-
         fetch("/api/sql/exec", {
             method: "POST",
             body: fd
@@ -95,8 +87,8 @@ export default function ToolBatchCreate() {
                 <form action={generateInserts} className="space-y-4">
                     <UITextarea
                         name="input"
-                        title="Original relationships"
-                        hint="{N}-{A}{U}|..."
+                        title="Tools List"
+                        hint="{NAME}-{DESC}|..."
                     />
                     <UIInput
                         type={InputType.submit}

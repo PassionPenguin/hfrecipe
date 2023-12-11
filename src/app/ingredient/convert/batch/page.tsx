@@ -70,14 +70,13 @@ export default function IngredientBatchConvert() {
         setInserts(r);
     }
 
-    function execInserts(fd: FormData) {
-        let inserts = fd.get("inserts") as string,
-            body = new FormData();
-        body.set("ddl", inserts);
+    function execInserts() {
+        let fd = new FormData();
+        fd.set("ddl", inserts);
 
         fetch("/api/sql/exec", {
             method: "POST",
-            body: body
+            body: fd
         }).then((response) => {
             if (response.ok) {
                 response.json().then((data) => {

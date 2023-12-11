@@ -1,10 +1,10 @@
 "use client";
 
-import { UserRole } from "@/app/user/usermodel";
+import {UserRole} from "@/app/user/usermodel";
 import ClientFrame from "@/components/frame/clientFrame";
-import Loading, { LoadingSkeletonType } from "@/components/loading";
-import { InputType, UIInput, UITextarea } from "@/components/ui/input";
-import { protectClientRoutes } from "@/lib/auth/protectClientRoutes";
+import Loading, {LoadingSkeletonType} from "@/components/loading";
+import {InputType, UIInput, UITextarea} from "@/components/ui/input";
+import {protectClientRoutes} from "@/lib/auth/protectClientRoutes";
 import nanoid from "@/lib/nanoid";
 import Cookies from "js-cookie";
 import {
@@ -12,7 +12,7 @@ import {
     usePathname,
     useSearchParams
 } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 
 export default function IngredientBatchCreate() {
     const [ingredients, setIngredients] = useState([]);
@@ -44,25 +44,17 @@ export default function IngredientBatchCreate() {
     }, []);
 
     function generateInserts(fd: FormData) {
-        let rId = fd.get("rId") as string,
-            input = fd.get("input") as string;
-
-        const units = [
-            { name: "g", id: "0000" },
-            { name: "mL", id: "0001" },
-            { name: "x", id: "0010" }
-        ];
+        let input = fd.get("input") as string;
         let r = "";
 
         input.split("|").forEach((e) => {
-            const s = new RegExp(/(.+?)-(\d+)(.+?)$/g),
+            const s = new RegExp(/(.+?)-(.+?)$/g),
                 m = s.exec(e);
             if (m === null) return;
             try {
                 if (ingredients.find((df) => df.title === m[1]) === undefined) {
-                    r += `INSERT INTO public."Ingredient" ("publicId", description, title) VALUES ('${nanoid(
-                        { length: 12 }
-                    )}', '', '${m[1].replaceAll("'", "''")}');\n`;
+                    let id = nanoid({length: 12})
+                    r += `INSERT INTO public."Ingredient" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll("'", "''")}', '${m[1].replaceAll("'", "''")}');\n`;
                 }
             } catch (e) {
                 setLog(log + "\n" + e.toString());
@@ -71,14 +63,12 @@ export default function IngredientBatchCreate() {
         setInserts(r);
     }
 
-    function execInserts(fd: FormData) {
-        let inserts = fd.get("inserts") as string,
-            body = new FormData();
-        body.set("ddl", inserts);
-
+    function execInserts() {
+        let fd = new FormData();
+        fd.set("ddl", inserts);
         fetch("/api/sql/exec", {
             method: "POST",
-            body: body
+            body: fd
         }).then((response) => {
             if (response.ok) {
                 response.json().then((data) => {
@@ -89,15 +79,15 @@ export default function IngredientBatchCreate() {
     }
 
     if (ingredients.length === 0) {
-        body = <Loading type={LoadingSkeletonType.text} />;
+        body = <Loading type={LoadingSkeletonType.text}/>;
     } else {
         body = (
             <>
                 <form action={generateInserts} className="space-y-4">
                     <UITextarea
                         name="input"
-                        title="Original relationships"
-                        hint="{N}-{A}{U}|..."
+                        title="Ingredients List"
+                        hint="{NAME}-{DESC}|..."
                     />
                     <UIInput
                         type={InputType.submit}
@@ -106,12 +96,6 @@ export default function IngredientBatchCreate() {
                     />
                 </form>
                 <form action={execInserts} className="space-y-4">
-                    <UIInput
-                        type={InputType.hidden}
-                        name="inserts"
-                        title="Inserts"
-                        value={inserts}
-                    />
                     <pre>
                         <code>{inserts}</code>
                     </pre>
@@ -129,7 +113,7 @@ export default function IngredientBatchCreate() {
     }
 
     if (checkUser === undefined)
-        return <Loading type={LoadingSkeletonType.text} />;
+        return <Loading type={LoadingSkeletonType.text}/>;
     else
         return (
             <ClientFrame

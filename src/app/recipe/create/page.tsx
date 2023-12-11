@@ -6,6 +6,7 @@ import nanoid from "@/lib/nanoid";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
+import MarkdownEditor from "@/components/ui/editor";
 
 export default async function RecipeCreatePage({
     searchParams
@@ -55,8 +56,14 @@ export default async function RecipeCreatePage({
                         placeholder="Servings Multiplier..."
                         hint="Servings per ingredients amounts"
                     />
-                    <UITextarea name="steps" title="Steps" />
-                    <UITextarea name="tips" title="Tips" />
+                    <MarkdownEditor source="" id="steps" title="Steps" />
+                    <MarkdownEditor source="" id="tips" title="Tips" />
+                    <UIInput
+                        type={InputType.text}
+                        name="odCover"
+                        title="Cover Image"
+                        placeholder="https://..."
+                    />
                     <Dropdown
                         _selected={cuisineTypes[0]}
                         all={cuisineTypes}
