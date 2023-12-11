@@ -1,9 +1,9 @@
-import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
+import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
-    let checkStatus = protectAPIRoutes(req);
+    let checkStatus = protectRequestRoutes(req);
     if (!checkStatus.status) {
         return NextResponse.json({ error: "NO PERMISSION" });
     }

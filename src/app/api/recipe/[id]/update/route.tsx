@@ -1,10 +1,10 @@
-import { protectAPIRoutes } from "@/lib/auth/protectAPIRoutes";
+import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-    let checkStatus = protectAPIRoutes(req);
+    let checkStatus = protectRequestRoutes(req);
     if (!checkStatus.status) {
         return NextResponse.json({ error: "NO PERMISSION" });
     }
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
         servingsMultiplier: parseInt(
             formData.get("servingsMultiplier") as string
         ),
+        odCover: formData.get("odCover") as string,
         cuisineTypeId: formData.get("cuisineTypeId") as string,
         steps: formData.get("steps") as string,
         tips: formData.get("tips") as string
@@ -34,6 +35,7 @@ export async function POST(req: NextRequest) {
                 title: data.title,
                 description: data.description,
                 servingsMultiplier: data.servingsMultiplier,
+                odCover: data.odCover,
                 cuisineTypeId: data.cuisineTypeId,
                 steps: data.steps,
                 tips: data.tips
