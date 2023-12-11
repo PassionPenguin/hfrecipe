@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { MSGraphClient } from "./client";
-import {MSGraphDriveItem, MSGraphError} from "./model";
+import { MSGraphDriveItem, MSGraphError } from "./model";
 
 export class MSGraphDriveProvider {
     dskUserID: string;
@@ -71,7 +71,10 @@ export class MSGraphDriveProvider {
         });
     }
 
-    async uploadDriveItem(path: string, content: any): Promise<MSGraphDriveItem | MSGraphError> {
+    async uploadDriveItem(
+        path: string,
+        content: any
+    ): Promise<MSGraphDriveItem | MSGraphError> {
         /// API endpoint: https://graph.microsoft.com/v1.0/users/{dsk-user-id}/drive/root:{path}:/content
         /// Response: DriveItem
         /// See: https://learn.microsoft.com/en-us/graph/api/driveitem-put-content
@@ -85,10 +88,10 @@ export class MSGraphDriveProvider {
                 method: "PUT",
                 headers: {
                     Authorization: await MSGraphClient.authProvider.getToken(),
-                    'Content-Type': 'application/octet-stream'
+                    "Content-Type": "application/octet-stream"
                 },
                 body: content,
-                duplex: 'half'
+                duplex: "half"
             }
         ).then(async (res) => {
             return (await res.json()) as MSGraphDriveItem | MSGraphError;

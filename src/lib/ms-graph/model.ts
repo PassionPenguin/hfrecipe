@@ -258,8 +258,6 @@ interface MSGraphThumbnail {
 interface MSGraphDriveItemVersion {}
 
 export type {
-    MSGraphError,
-    MSGraphErrorBody,
     MSGraphAlbum,
     MSGraphAudio,
     MSGraphBaseItem,
@@ -268,6 +266,8 @@ export type {
     MSGraphDriveItem,
     MSGraphDriveItemVersion,
     MSGraphDriveType,
+    MSGraphError,
+    MSGraphErrorBody,
     MSGraphFile,
     MSGraphFileSystemInfo,
     MSGraphFolder,
