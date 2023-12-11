@@ -70,7 +70,7 @@ export function UIInput({
     }
     return (
         <div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-2">
                 <label
                     htmlFor={name}
                     className="block text-sm font-medium leading-6"
@@ -79,7 +79,7 @@ export function UIInput({
                 </label>
                 <div className="text-sm">{hint}</div>
             </div>
-            <div className="relative mt-2 rounded-md shadow-sm">
+            <div className="relative rounded shadow-sm">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                     {prefix}
                 </div>
@@ -87,7 +87,7 @@ export function UIInput({
                     type="text"
                     name={name}
                     id={name}
-                    className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 dark:bg-slate-900 sm:text-sm  sm:leading-6"
+                    className="block w-full rounded-md border-2 border-slate-300 dark:border-slate-600 py-1.5 pl-7 pr-20 placeholder:text-gray-400 dark:bg-slate-900 sm:text-sm  sm:leading-6"
                     placeholder={placeholder}
                     defaultValue={defaultValue}
                 />
