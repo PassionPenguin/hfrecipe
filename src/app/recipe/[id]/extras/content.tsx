@@ -1,11 +1,21 @@
-'use client'
+"use client";
 
-import {CountableExtras} from "@/lib/utils/extrasConverter";
-import React, {useEffect, useState} from "react";
-import Loading, {LoadingSkeletonType} from "@/components/loading";
-import {InputType, UIInput, UITextarea} from "@/components/ui/input";
+import Loading, { LoadingSkeletonType } from "@/components/loading";
+import { InputType, UIInput, UITextarea } from "@/components/ui/input";
+import { CountableExtras } from "@/lib/utils/extrasConverter";
+import { useEffect, useState } from "react";
 
-export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}: { recipeId: string, tableName: string, extrasName: string, _extras?: string }) {
+export default function ExtrasEditor({
+    recipeId,
+    tableName,
+    extrasName,
+    _extras
+}: {
+    recipeId: string;
+    tableName: string;
+    extrasName: string;
+    _extras?: string;
+}) {
     const [allExtras, setAllExtras] = useState([]);
     const [extras, setExtras] = useState<CountableExtras[]>([]);
 
@@ -14,7 +24,19 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
             if (response.ok) {
                 response.json().then((data) => {
                     setAllExtras(data);
-                    setExtras(_extras ? _extras.split("|").map(e => new CountableExtras({string: e, all: data})) : []);
+                    setExtras(
+                        _extras
+                            ? _extras
+                                  .split("|")
+                                  .map(
+                                      (e) =>
+                                          new CountableExtras({
+                                              string: e,
+                                              all: data
+                                          })
+                                  )
+                            : []
+                    );
                 });
             }
         });
@@ -24,13 +46,20 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
     const [log, setLog] = useState("");
 
     function generateInserts(fd: FormData) {
-        let newExtras = (fd.get("input") as string).split("|").map(e => new CountableExtras({string: e, all: allExtras}));
+        let newExtras = (fd.get("input") as string)
+            .split("|")
+            .map((e) => new CountableExtras({ string: e, all: allExtras }));
         /// Compare the `newExtras` with the `extras` and generate the inserts, update and delete.
         /// Then, set the `inserts` state to the generated inserts.
 
         setDDLs("");
-        let oldSize = extras.length, oldVisited = [], newSize = newExtras.length, newVisited = [];
-        let inserts: any[], updates = [], deletes: any[];
+        let oldSize = extras.length,
+            oldVisited = [],
+            newSize = newExtras.length,
+            newVisited = [];
+        let inserts: any[],
+            updates = [],
+            deletes: any[];
         for (let i = 0; i < oldSize; i++) oldVisited[i] = 0;
         for (let i = 0; i < newSize; i++) newVisited[i] = 0;
 
@@ -39,7 +68,10 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
                 if (extras[i].name === newExtras[j].name) {
                     oldVisited[i] = 1;
                     newVisited[j] = 1;
-                    if (extras[i].amount === newExtras[j].amount && extras[i].unit.id === newExtras[j].unit.id)
+                    if (
+                        extras[i].amount === newExtras[j].amount &&
+                        extras[i].unit.id === newExtras[j].unit.id
+                    )
                         continue;
                     updates.push(newExtras[j]);
                 }
@@ -47,11 +79,25 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
         inserts = newExtras.filter((_, i) => newVisited[i] === 0);
         deletes = extras.filter((_, i) => oldVisited[i] === 0);
 
-        inserts = inserts.map(e => e.toInsertDDL(recipeId, tableName, extrasName));
-        updates = updates.map(e => e.toUpdateDDL(recipeId, tableName, extrasName));
-        deletes = deletes.map(e => e.toDeleteDDL(recipeId, tableName, extrasName));
+        inserts = inserts.map((e) =>
+            e.toInsertDDL(recipeId, tableName, extrasName)
+        );
+        updates = updates.map((e) =>
+            e.toUpdateDDL(recipeId, tableName, extrasName)
+        );
+        deletes = deletes.map((e) =>
+            e.toDeleteDDL(recipeId, tableName, extrasName)
+        );
 
-        setDDLs((inserts.join("\n") + "\n" + updates.join("\n") + "\n" + deletes.join("\n")).trim());
+        setDDLs(
+            (
+                inserts.join("\n") +
+                "\n" +
+                updates.join("\n") +
+                "\n" +
+                deletes.join("\n")
+            ).trim()
+        );
     }
 
     function execInserts() {
@@ -73,7 +119,7 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
 
     if (!allExtras.length) {
         console.log(extrasName, "\t", _extras, "\n", extras, "\n");
-        return <Loading type={LoadingSkeletonType.text}/>;
+        return <Loading type={LoadingSkeletonType.text} />;
     }
 
     return (
@@ -82,7 +128,7 @@ export default function ExtrasEditor({recipeId, tableName, extrasName, _extras}:
                 <UITextarea
                     name="input"
                     title="Raw Input"
-                    defaultValue={extras.map(e => e.toString()).join("|")}
+                    defaultValue={extras.map((e) => e.toString()).join("|")}
                     hint="{NAME}-{DESC}|..."
                 />
                 <UIInput

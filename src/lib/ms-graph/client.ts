@@ -14,7 +14,12 @@ export class MSGraphClient {
                 tenantID = process.env.MSGRAPH_TENANT_ID,
                 clientID = process.env.MSGRAPH_CLIENT_ID,
                 clientSecret = process.env.MSGRAPH_CLIENT_SECRET;
-            MSGraphClient._secret = { dskUserID, tenantID, clientID, clientSecret };
+            MSGraphClient._secret = {
+                dskUserID,
+                tenantID,
+                clientID,
+                clientSecret
+            };
         }
         return this._secret;
     }

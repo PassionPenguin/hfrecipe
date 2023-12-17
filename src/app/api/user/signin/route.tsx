@@ -1,4 +1,9 @@
-import {Session, encodeSession, hashPassword, generateTOTPCode} from "@/lib/auth/auth";
+import {
+    Session,
+    encodeSession,
+    generateTOTPCode,
+    hashPassword
+} from "@/lib/auth/auth";
 import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -38,7 +43,10 @@ export async function POST(req: NextRequest) {
         });
 
         if (result) {
-            if(result.otpSalt.trim().length && generateTOTPCode(result.otpSalt) === data.otpCode) {
+            if (
+                result.otpSalt.trim().length &&
+                generateTOTPCode(result.otpSalt) === data.otpCode
+            ) {
                 session = {
                     id: result.publicId,
                     dateCreated: Date.now(),
@@ -49,7 +57,7 @@ export async function POST(req: NextRequest) {
                 };
                 path = `/?state=true&msg=Signed in as ${result.title}`;
             } else {
-                path = "/user/signin?state=false&msg=Incorrect otp code"
+                path = "/user/signin?state=false&msg=Incorrect otp code";
             }
         } else {
             path = `/user/signin?state=false&msg=Incorrect username or password`;

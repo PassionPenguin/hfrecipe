@@ -1,10 +1,10 @@
 "use client";
 
-import {UserRole} from "@/app/user/usermodel";
+import { UserRole } from "@/app/user/usermodel";
 import ClientFrame from "@/components/frame/clientFrame";
-import Loading, {LoadingSkeletonType} from "@/components/loading";
-import {InputType, UIInput, UITextarea} from "@/components/ui/input";
-import {protectClientRoutes} from "@/lib/auth/protectClientRoutes";
+import Loading, { LoadingSkeletonType } from "@/components/loading";
+import { InputType, UIInput, UITextarea } from "@/components/ui/input";
+import { protectClientRoutes } from "@/lib/auth/protectClientRoutes";
 import nanoid from "@/lib/nanoid";
 import Cookies from "js-cookie";
 import {
@@ -12,7 +12,7 @@ import {
     usePathname,
     useSearchParams
 } from "next/navigation";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 export default function IngredientBatchCreate() {
     const [checkUser, setCheckUser] = useState({
@@ -54,8 +54,11 @@ export default function IngredientBatchCreate() {
             if (m === null) return;
             try {
                 if (ingredients.find((df) => df.title === m[1]) === undefined) {
-                    let id = nanoid({length: 12})
-                    r += `INSERT INTO public."Ingredient" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll("'", "''")}', '${m[1].replaceAll("'", "''")}');\n`;
+                    let id = nanoid({ length: 12 });
+                    r += `INSERT INTO public."Ingredient" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll(
+                        "'",
+                        "''"
+                    )}', '${m[1].replaceAll("'", "''")}');\n`;
                 }
             } catch (e) {
                 setLog(log + "\n" + e.toString());
@@ -80,7 +83,7 @@ export default function IngredientBatchCreate() {
     }
 
     if (ingredients.length === 0) {
-        body = <Loading type={LoadingSkeletonType.text}/>;
+        body = <Loading type={LoadingSkeletonType.text} />;
     } else {
         body = (
             <>
@@ -114,7 +117,7 @@ export default function IngredientBatchCreate() {
     }
 
     if (checkUser === undefined)
-        return <Loading type={LoadingSkeletonType.text}/>;
+        return <Loading type={LoadingSkeletonType.text} />;
     else
         return (
             <ClientFrame

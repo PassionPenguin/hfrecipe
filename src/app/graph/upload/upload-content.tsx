@@ -1,9 +1,9 @@
 "use client";
 
-import {useRef, useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faClose} from "@fortawesome/free-solid-svg-icons";
 import nanoid from "@/lib/nanoid";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRef, useState } from "react";
 
 interface UploadContentProps {
     file: File;
@@ -20,14 +20,19 @@ export default function UploadContent() {
         console.log("File has been added");
         if (e.target.files && e.target.files[0]) {
             for (let i = 0; i < e.target.files["length"]; i++) {
-                let id = nanoid({length: 12}), originalFile = e.target.files[i],
-                    f = new File([originalFile], id + "." +  originalFile.name.split(".").pop(), {
-                        type: originalFile.type,
-                        lastModified: originalFile.lastModified,
-                    });
+                let id = nanoid({ length: 12 }),
+                    originalFile = e.target.files[i],
+                    f = new File(
+                        [originalFile],
+                        id + "." + originalFile.name.split(".").pop(),
+                        {
+                            type: originalFile.type,
+                            lastModified: originalFile.lastModified
+                        }
+                    );
                 setFiles((prevState: any) => [
                     ...prevState,
-                    {file: f, status: "pending"}
+                    { file: f, status: "pending" }
                 ]);
             }
         }
@@ -39,16 +44,18 @@ export default function UploadContent() {
         } else {
             files.forEach(async (f) => {
                 let result = await fetch(
-                    "/api/graph/upload?name=" + f.file.name,
-                    {
-                        method: "PUT",
-                        body: f.file
-                    }
-                ), json = await result.json();
+                        "/api/graph/upload?name=" + f.file.name,
+                        {
+                            method: "PUT",
+                            body: f.file
+                        }
+                    ),
+                    json = await result.json();
                 setFiles((prevState: any) => {
                     let newArr = [...prevState];
-                    newArr[prevState.indexOf(f)].status =
-                        json["success"] ? "success" : "failed";
+                    newArr[prevState.indexOf(f)].status = json["success"]
+                        ? "success"
+                        : "failed";
                     return newArr;
                 });
             });
@@ -61,14 +68,19 @@ export default function UploadContent() {
         setDragActive(false);
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             for (let i = 0; i < e.dataTransfer.files["length"]; i++) {
-                let id = nanoid({length: 12}), originalFile = e.dataTransfer.files[i],
-                    f = new File([originalFile], id + "." + originalFile.name.split(".").pop(), {
-                        type: originalFile.type,
-                        lastModified: originalFile.lastModified,
-                    });
+                let id = nanoid({ length: 12 }),
+                    originalFile = e.dataTransfer.files[i],
+                    f = new File(
+                        [originalFile],
+                        id + "." + originalFile.name.split(".").pop(),
+                        {
+                            type: originalFile.type,
+                            lastModified: originalFile.lastModified
+                        }
+                    );
                 setFiles((prevState: any) => [
                     ...prevState,
-                    {file: f, status: "pending"}
+                    { file: f, status: "pending" }
                 ]);
             }
         }
@@ -111,7 +123,7 @@ export default function UploadContent() {
                     dragActive
                         ? "bg-slate-400 dark:bg-slate-600"
                         : "bg-slate-100 dark:bg-slate-900"
-                }  flex min-h-[10rem] w-full max-w-[1080px] mx-auto flex-col items-center justify-center rounded-lg px-8 py-4 text-center`}
+                }  mx-auto flex min-h-[10rem] w-full max-w-[1080px] flex-col items-center justify-center rounded-lg px-8 py-4 text-center`}
                 onDragEnter={handleDragEnter}
                 onSubmit={(e) => e.preventDefault()}
                 onDrop={handleDrop}
@@ -140,10 +152,12 @@ export default function UploadContent() {
                     to upload
                 </p>
 
-                <div className="flex flex-wrap flex-row items-center p-3">
+                <div className="flex flex-row flex-wrap items-center p-3">
                     {files.map((file: any, idx: any) => (
-                        <div key={idx}
-                             className="flex flex-col w-[33.33%] lg:w-[25%] aspect-square align-middle justify-start">
+                        <div
+                            key={idx}
+                            className="flex aspect-square w-[33.33%] flex-col justify-start align-middle lg:w-[25%]"
+                        >
                             <div className="flex-row space-x-2">
                                 <span>{file.file.name}</span>
                                 <span
@@ -152,23 +166,34 @@ export default function UploadContent() {
                                         (file.status === "pending"
                                             ? "text-blue-600 dark:text-blue-400"
                                             : file.status === "success"
-                                                ? "text-green-600 dark:text-green-400"
-                                                : "text-red-600 dark:text-red-400")
+                                              ? "text-green-600 dark:text-green-400"
+                                              : "text-red-600 dark:text-red-400")
                                     }
                                 >
-                                {file.status === "pending"
-                                    ? "Pending..."
-                                    : file.status === "success"
-                                        ? "Success"
-                                        : "Failed"}
-                            </span>
-                                <FontAwesomeIcon icon={faClose}
-                                                 className="cursor-pointer text-red-600 dark:text-red-400"
-                                                 onClick={() => removeFile(file.file.name, idx)}/>
+                                    {file.status === "pending"
+                                        ? "Pending..."
+                                        : file.status === "success"
+                                          ? "Success"
+                                          : "Failed"}
+                                </span>
+                                <FontAwesomeIcon
+                                    icon={faClose}
+                                    className="cursor-pointer text-red-600 dark:text-red-400"
+                                    onClick={() =>
+                                        removeFile(file.file.name, idx)
+                                    }
+                                />
                             </div>
                             <div className="">
-                                <img src={file.file ? URL.createObjectURL(file.file) : ""} alt={"preview-" + idx}
-                                     className="w-full h-full object-contain"/>
+                                <img
+                                    src={
+                                        file.file
+                                            ? URL.createObjectURL(file.file)
+                                            : ""
+                                    }
+                                    alt={"preview-" + idx}
+                                    className="h-full w-full object-contain"
+                                />
                             </div>
                         </div>
                     ))}

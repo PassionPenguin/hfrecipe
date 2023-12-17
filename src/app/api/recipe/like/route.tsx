@@ -1,6 +1,5 @@
 import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
-import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +8,9 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "NO PERMISSION" });
     }
 
-    let formData = await req.json(), userId = formData["userId"], recipeId = formData["recipeId"];
+    let formData = await req.json(),
+        userId = formData["userId"],
+        recipeId = formData["recipeId"];
 
     try {
         let record = await prisma.fUserRecipeLikes.findUnique({
@@ -30,7 +31,7 @@ export async function POST(req: NextRequest) {
                     }
                 }
             });
-            return NextResponse.json({success: true, like: false});
+            return NextResponse.json({ success: true, like: false });
         } else {
             await prisma.fUserRecipeLikes.create({
                 data: {
@@ -38,9 +39,9 @@ export async function POST(req: NextRequest) {
                     recipeId: recipeId
                 }
             });
-            return NextResponse.json({success: true, like: true});
+            return NextResponse.json({ success: true, like: true });
         }
     } catch (e: any) {
-        return NextResponse.json({success: false});
+        return NextResponse.json({ success: false });
     }
 }

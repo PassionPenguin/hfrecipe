@@ -1,13 +1,11 @@
-import {protectAPIRequestRoutes, protectRequestRoutes} from "@/lib/auth/protectRequestRoutes";
+import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
-import {revalidatePath} from "next/cache";
-import {NextRequest, NextResponse} from "next/server";
-import {NextApiRequest} from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     let checkStatus = protectRequestRoutes(req);
     if (!checkStatus.status) {
-        return NextResponse.json({error: "NO PERMISSION"});
+        return NextResponse.json({ error: "NO PERMISSION" });
     }
 
     let origin = req.nextUrl.origin,
@@ -19,7 +17,7 @@ export async function GET(req: NextRequest) {
 
     try {
         let result = await prisma.fRecipeIngredient.findMany({
-            where: {recipeId: recipeId},
+            where: { recipeId: recipeId },
             include: {
                 ingredient: true
             }
@@ -28,9 +26,9 @@ export async function GET(req: NextRequest) {
         if (result) {
             return NextResponse.json(result);
         } else {
-            return NextResponse.json({error: "NO RESULT"});
+            return NextResponse.json({ error: "NO RESULT" });
         }
     } catch (e: any) {
-        return NextResponse.json({error: e});
+        return NextResponse.json({ error: e });
     }
 }

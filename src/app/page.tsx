@@ -1,13 +1,13 @@
-import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 import React from "react";
 import Frame from "../components/frame/frame";
 import prisma from "../lib/prisma";
 import RecipeList from "./recipe/recipe-list";
 
 export default async function Home({
-                                       params,
-                                       searchParams
-                                   }: {
+    params,
+    searchParams
+}: {
     params: {
         id: string;
     };
@@ -21,20 +21,21 @@ export default async function Home({
         body = <>NO PERMISSION</>;
     } else {
         const recipes = await prisma.recipe.findMany({
-            take: 10,
-            where: {deletedAt: null},
-            include: {cuisineType: true},
-            orderBy: {updatedAt: "desc"}
-        }), trendingRecipes = await prisma.recipe.findMany({
-            take: 10,
-            where: {deletedAt: null},
-            include: {cuisineType: true},
-            orderBy: {
-                fUserRecipeLikes: {
-                    _count: "desc"
+                take: 10,
+                where: { deletedAt: null },
+                include: { cuisineType: true },
+                orderBy: { updatedAt: "desc" }
+            }),
+            trendingRecipes = await prisma.recipe.findMany({
+                take: 10,
+                where: { deletedAt: null },
+                include: { cuisineType: true },
+                orderBy: {
+                    fUserRecipeLikes: {
+                        _count: "desc"
+                    }
                 }
-            }
-        });
+            });
         body = (
             <>
                 <div className="relative isolate px-6 pt-14 lg:px-8">
@@ -52,8 +53,7 @@ export default async function Home({
                     </div>
                     <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
                         <div className="hidden sm:mb-8 sm:flex sm:justify-center">
-                            <div
-                                className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-400">
+                            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-400">
                                 好吃，多吃，爱吃{" "}
                                 <a
                                     href="/recipe"
@@ -104,8 +104,11 @@ export default async function Home({
                         />
                     </div>
                 </div>
-                <RecipeList recipes={recipes} title="Recent Recipes"/>
-                <RecipeList recipes={trendingRecipes} title="Trending Recipes"/>
+                <RecipeList recipes={recipes} title="Recent Recipes" />
+                <RecipeList
+                    recipes={trendingRecipes}
+                    title="Trending Recipes"
+                />
             </>
         );
     }

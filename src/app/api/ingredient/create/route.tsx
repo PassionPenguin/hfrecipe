@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const data = {
         publicId: formData.get("publicId") as string,
         title: formData.get("title") as string,
-        description: formData.get("description") as string,
+        description: formData.get("description") as string
     };
 
     let origin = req.headers.get("origin"),
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
             data: {
                 publicId: data.publicId,
                 title: data.title,
-                description: data.description,
+                description: data.description
             }
         });
         if (result) {

@@ -1,4 +1,4 @@
-import {Session, encodeSession, hashPassword, generateTOTPCode} from "@/lib/auth/auth";
+import { Session, encodeSession, generateTOTPCode } from "@/lib/auth/auth";
 import { protectRequestRoutes } from "@/lib/auth/protectRequestRoutes";
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     try {
         let result = await prisma.user.findFirst({
             where: {
-                title: data.name,
+                title: data.name
             },
             select: {
                 publicId: true,
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (result) {
-            if(data.otpCode === generateTOTPCode(result.otpSalt)) {
+            if (data.otpCode === generateTOTPCode(result.otpSalt)) {
                 session = {
                     id: result.publicId,
                     dateCreated: Date.now(),

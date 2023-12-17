@@ -13,7 +13,11 @@ import {
 } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-export default function IngredientBatchConvert({params}: {params: { id: string }}) {
+export default function IngredientBatchConvert({
+    params
+}: {
+    params: { id: string };
+}) {
     const [ingredients, setIngredients] = useState([]);
     const [inserts, setInserts] = useState("");
     let body: React.ReactElement;

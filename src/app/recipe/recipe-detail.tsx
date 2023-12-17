@@ -1,18 +1,20 @@
 import DateTime from "@/components/ui/date";
-import ExtendedImage from "@/components/ui/extended-image";
+import {
+    default as ExtendedImage,
+    default as LazyExtendedImage
+} from "@/components/ui/extended-image";
+import UserContentActions from "@/components/userContentActions";
 import prisma from "@/lib/prisma";
+import { parseUnit } from "@/lib/utils/extrasConverter";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
-import {UserRole} from "../user/usermodel";
-import UserContentActions from "@/components/userContentActions";
-import LazyExtendedImage from "@/components/ui/extended-image";
-import {parseUnit} from "@/lib/utils/extrasConverter";
+import { UserRole } from "../user/usermodel";
 
 export default async function RecipeDetail({
-                                               recipeId,
-                                               userRole,
-                                               userId
-                                           }: Readonly<{
+    recipeId,
+    userRole,
+    userId
+}: Readonly<{
     recipeId: string;
     userRole: UserRole;
     userId: string;
@@ -32,7 +34,7 @@ export default async function RecipeDetail({
                         }
                     },
                     amount: true,
-                    unit: true,
+                    unit: true
                 }
             },
             fRecipeTool: {
@@ -47,11 +49,14 @@ export default async function RecipeDetail({
                     unit: true
                 }
             },
-            fUserRecipeLikes: userId != null ? {
-                where: {
-                    userId: userId
-                }
-            } : {}
+            fUserRecipeLikes:
+                userId != null
+                    ? {
+                          where: {
+                              userId: userId
+                          }
+                      }
+                    : {}
         }
     });
     let recipeLikeCount = await prisma.fUserRecipeLikes.count({
@@ -79,8 +84,8 @@ export default async function RecipeDetail({
                         {recipe.description}
                     </p>
                     <p className="text-gray-600 dark:text-gray-400">
-                        First published <DateTime date={recipe.createdAt}/>,
-                        Last modified <DateTime date={recipe.updatedAt}/>
+                        First published <DateTime date={recipe.createdAt} />,
+                        Last modified <DateTime date={recipe.updatedAt} />
                     </p>
                 </div>
             </>
@@ -95,8 +100,14 @@ export default async function RecipeDetail({
                         {recipe.fRecipeIngredient.map((ingredient) => (
                             <li key={ingredient.ingredient.publicId}>
                                 <Link
-                                    href={"/ingredient/" + ingredient.ingredient.publicId}>{ingredient.ingredient.title}</Link>{" "}
-                                {ingredient.amount}{" "}{parseUnit(ingredient.unit)}
+                                    href={
+                                        "/ingredient/" +
+                                        ingredient.ingredient.publicId
+                                    }
+                                >
+                                    {ingredient.ingredient.title}
+                                </Link>{" "}
+                                {ingredient.amount} {parseUnit(ingredient.unit)}
                             </li>
                         ))}
                     </ul>
@@ -108,9 +119,10 @@ export default async function RecipeDetail({
                     <ul>
                         {recipe.fRecipeTool.map((tool) => (
                             <li key={tool.tool.publicId}>
-                                <Link
-                                    href={"/tool/" + tool.tool.publicId}>{tool.tool.title}</Link>{" "}
-                                {tool.amount}{" "}{parseUnit(tool.unit)}
+                                <Link href={"/tool/" + tool.tool.publicId}>
+                                    {tool.tool.title}
+                                </Link>{" "}
+                                {tool.amount} {parseUnit(tool.unit)}
                             </li>
                         ))}
                     </ul>
@@ -124,7 +136,7 @@ export default async function RecipeDetail({
         return (
             <>
                 {titleSection}
-                <hr/>
+                <hr />
                 {preparationSection}
                 <h2 className="py-4 text-3xl font-bold" id="step">
                     Steps
@@ -162,16 +174,14 @@ export default async function RecipeDetail({
     let editorialButtons = <></>;
     if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
         editorialButtons = (
-            <div className="pt-16 space-x-4">
+            <div className="space-x-4 pt-16">
                 <Link href={"/recipe/" + recipeId + "/edit"}>
-                    <button
-                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
+                    <button className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
                         Edit
                     </button>
                 </Link>
                 <Link href={"/recipe/" + recipeId + "/extras"}>
-                    <button
-                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
+                    <button className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
                         Edit Extras
                     </button>
                 </Link>
@@ -180,9 +190,9 @@ export default async function RecipeDetail({
     }
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="mx-auto max-w-6xl">
             {titleSection}
-            <hr/>
+            <hr />
             {preparationSection}
             <h2 className="py-4 text-3xl font-bold" id="step">
                 Steps
@@ -208,7 +218,7 @@ export default async function RecipeDetail({
             >
                 {recipe.steps}
             </ReactMarkdown>
-            <hr/>
+            <hr />
             <h2 className="py-4 text-3xl font-bold" id="tips">
                 Tips
             </h2>
@@ -217,7 +227,12 @@ export default async function RecipeDetail({
             </ReactMarkdown>
             {editorialButtons}
             <div className="my-8" />
-            <UserContentActions userId={userId} recipeId={recipe.publicId} currentLikeState={recipe.fUserRecipeLikes} currentLikeCount={recipeLikeCount}/>
+            <UserContentActions
+                userId={userId}
+                recipeId={recipe.publicId}
+                currentLikeState={recipe.fUserRecipeLikes}
+                currentLikeCount={recipeLikeCount}
+            />
         </div>
     );
 }

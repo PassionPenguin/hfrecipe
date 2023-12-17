@@ -5,7 +5,7 @@ import UIButton, { ButtonType } from "@/components/ui/button";
 import DateTime from "@/components/ui/date";
 import Ingredient from "@/lib/models/ingredient";
 import Link from "next/link";
-import React, { useState } from "react";
+import { useState } from "react";
 
 enum SortBy {
     TITLE,
@@ -169,7 +169,10 @@ export default function IngredientList({
                         <p className="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">
                             Browse a list of ingredients with description.
                             <Link href="/ingredient/create">
-                                <UIButton title="Create ingredient" buttonType={ButtonType.link}/>
+                                <UIButton
+                                    title="Create ingredient"
+                                    buttonType={ButtonType.link}
+                                />
                             </Link>
                         </p>
                     </caption>

@@ -12,20 +12,32 @@ async function ExtendedImage({
     className: string;
 }) {
     if (src.startsWith("https://msgraph.hoarfroster.space/")) {
-        if(typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
             let headers = new Headers();
-            headers.append("GraphPath",
-                src.replace("https://msgraph.hoarfroster.space/", "/"));
-            return fetch("/api/graph/download", {headers: headers}).then(async (res) => {
-                if (res.ok) {
-                    const result_1 = await res.json();
-                    if (result_1['@odata.context'] !== undefined) {
-                        return <img src={result_1['@microsoft.graph.downloadUrl']} alt={alt} className={className}/>;
-                    } else {
-                        return <></>;
+            headers.append(
+                "GraphPath",
+                src.replace("https://msgraph.hoarfroster.space/", "/")
+            );
+            return fetch("/api/graph/download", { headers: headers }).then(
+                async (res) => {
+                    if (res.ok) {
+                        const result_1 = await res.json();
+                        if (result_1["@odata.context"] !== undefined) {
+                            return (
+                                <img
+                                    src={
+                                        result_1["@microsoft.graph.downloadUrl"]
+                                    }
+                                    alt={alt}
+                                    className={className}
+                                />
+                            );
+                        } else {
+                            return <></>;
+                        }
                     }
-               }
-            });
+                }
+            );
         }
         return MSGraphClient.driveProvider
             .getDriveItemURL(

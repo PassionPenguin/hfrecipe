@@ -1,15 +1,15 @@
+import { RecipeItem } from "@/app/recipe/recipe-item";
 import Frame from "@/components/frame/frame";
-import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 import prisma from "@/lib/prisma";
 import Image from "next/image";
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 import React from "react";
-import {decodeUserRole, User, userAvatars} from "../usermodel";
-import {RecipeItem} from "@/app/recipe/recipe-item";
+import { decodeUserRole, User, userAvatars } from "../usermodel";
 
 export default async function UserProfile({
-                                              searchParams
-                                          }: {
+    searchParams
+}: {
     searchParams?: {
         [key: string]: string | string[] | undefined;
     };
@@ -80,8 +80,10 @@ export default async function UserProfile({
                     </div>
                 </div>
                 <div className="content">
-                    <h2 className="font-bold text-4xl">My Collection</h2>
-                    {recipes.map(recipe => <RecipeItem recipe={recipe}/>)}
+                    <h2 className="text-4xl font-bold">My Collection</h2>
+                    {recipes.map((recipe) => (
+                        <RecipeItem recipe={recipe} />
+                    ))}
                 </div>
             </>
         );

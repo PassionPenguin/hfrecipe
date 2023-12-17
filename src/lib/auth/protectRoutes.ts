@@ -55,13 +55,15 @@ export function protectRoutes({
                     return {
                         status: true,
                         userType: UserRole.SuperAdmin,
-                        userName: name, userId: id
+                        userName: name,
+                        userId: id
                     };
                 case UserRole.Admin:
                     return {
                         status: permission !== PathPermission.SuperAdmin,
                         userType: UserRole.Admin,
-                        userName: name, userId: id
+                        userName: name,
+                        userId: id
                     };
                 case UserRole.User:
                     return {
@@ -69,13 +71,15 @@ export function protectRoutes({
                             permission !== PathPermission.SuperAdmin &&
                             permission !== PathPermission.Admin,
                         userType: UserRole.User,
-                        userName: name, userId: id
+                        userName: name,
+                        userId: id
                     };
                 case UserRole.Guest:
                     return {
                         status: permission === PathPermission.Guest,
                         userType: UserRole.User,
-                        userName: name, userId: id
+                        userName: name,
+                        userId: id
                     };
             }
         }

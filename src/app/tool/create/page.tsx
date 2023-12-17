@@ -1,15 +1,13 @@
-import Dropdown from "@/components/dropdown";
 import Frame from "@/components/frame/frame";
-import { InputType, UIInput, UITextarea } from "@/components/ui/input";
+import { InputType, UIInput } from "@/components/ui/input";
 import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
 import nanoid from "@/lib/nanoid";
-import prisma from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
 
 export default async function IngredientCreatePage({
-                                                   searchParams
-                                               }: {
+    searchParams
+}: {
     searchParams?: {
         [key: string]: string | string[] | undefined;
     };

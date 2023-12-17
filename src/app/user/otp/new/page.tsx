@@ -1,14 +1,14 @@
-import React from "react";
-import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
-import {InputType, UIInput} from "@/components/ui/input";
-import Frame from "@/components/frame/frame";
-import {generateTOTPSecret} from "@/lib/auth/auth";
 import OTPDisplay from "@/app/user/otp/otp-display";
+import Frame from "@/components/frame/frame";
+import { InputType, UIInput } from "@/components/ui/input";
+import { generateTOTPSecret } from "@/lib/auth/auth";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
+import React from "react";
 
 export default async function CreateOTP({
-                                            params,
-                                            searchParams
-                                        }: {
+    params,
+    searchParams
+}: {
     params: {
         id: string;
     };
@@ -26,12 +26,14 @@ export default async function CreateOTP({
         let otpUrl = `otpauth://totp/HFRecipe:${checkUser.userName}?secret=${totpSecret}&issuer=Hoarfroster`;
 
         console.log(otpUrl);
-        const QRCode = require('qrcode');
+        const QRCode = require("qrcode");
 
-        let qrCodeUrl: string = await (new Promise((resolve, reject) => QRCode.toDataURL(otpUrl, function (err: Error, url: string) {
-            if (err) reject(err);
-            else resolve(url);
-        })));
+        let qrCodeUrl: string = await new Promise((resolve, reject) =>
+            QRCode.toDataURL(otpUrl, function (err: Error, url: string) {
+                if (err) reject(err);
+                else resolve(url);
+            })
+        );
 
         body = (
             <div>
@@ -40,15 +42,29 @@ export default async function CreateOTP({
                     method="POST"
                     className="space-y-4"
                 >
-                    <h1 className="py-4 text-3xl font-bold">
-                        Create OTP
-                    </h1>
-                    <p>Scan the QRCode below with your authenticator application to save the OTP secret.</p>
-                    <img src={qrCodeUrl} alt="OTP QR Code"/>
-                    <p>And verify if the code on your authenticator application matches the code below.</p>
-                    <OTPDisplay secret={totpSecret}/>
-                    <UIInput type={InputType.hidden} name="secret" title="Secret" defaultValue={totpSecret}/>
-                    <UIInput type={InputType.hidden} name="userId" title="User ID" defaultValue={checkUser.userId}/>
+                    <h1 className="py-4 text-3xl font-bold">Create OTP</h1>
+                    <p>
+                        Scan the QRCode below with your authenticator
+                        application to save the OTP secret.
+                    </p>
+                    <img src={qrCodeUrl} alt="OTP QR Code" />
+                    <p>
+                        And verify if the code on your authenticator application
+                        matches the code below.
+                    </p>
+                    <OTPDisplay secret={totpSecret} />
+                    <UIInput
+                        type={InputType.hidden}
+                        name="secret"
+                        title="Secret"
+                        defaultValue={totpSecret}
+                    />
+                    <UIInput
+                        type={InputType.hidden}
+                        name="userId"
+                        title="User ID"
+                        defaultValue={checkUser.userId}
+                    />
                     <UIInput
                         type={InputType.submit}
                         name="submit"

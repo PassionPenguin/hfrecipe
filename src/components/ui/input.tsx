@@ -70,7 +70,7 @@ export function UIInput({
     }
     return (
         <div>
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2 flex items-center justify-between">
                 <label
                     htmlFor={name}
                     className="block text-sm font-medium leading-6"
@@ -87,7 +87,7 @@ export function UIInput({
                     type="text"
                     name={name}
                     id={name}
-                    className="block w-full rounded-md border-2 border-slate-300 dark:border-slate-600 py-1.5 pl-7 pr-20 placeholder:text-gray-400 dark:bg-slate-900 sm:text-sm  sm:leading-6"
+                    className="block w-full rounded-md border-2 border-slate-300 py-1.5 pl-7 pr-20 placeholder:text-gray-400 dark:border-slate-600 dark:bg-slate-900 sm:text-sm  sm:leading-6"
                     placeholder={placeholder}
                     defaultValue={defaultValue}
                 />

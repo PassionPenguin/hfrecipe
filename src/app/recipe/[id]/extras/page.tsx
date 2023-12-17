@@ -1,15 +1,15 @@
-import Frame from "@/components/frame/frame";
-import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
-import prisma from "@/lib/prisma";
-import React from "react";
 import ExtrasEditor from "@/app/recipe/[id]/extras/content";
-import UIButton, {ButtonType} from "@/components/ui/button";
+import Frame from "@/components/frame/frame";
+import UIButton, { ButtonType } from "@/components/ui/button";
+import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
+import prisma from "@/lib/prisma";
 import Link from "next/link";
+import React from "react";
 
 export default async function RecipeExtraPage({
-                                                  params,
-                                                  searchParams
-                                              }: {
+    params,
+    searchParams
+}: {
     params: {
         id: string;
     };
@@ -22,20 +22,30 @@ export default async function RecipeExtraPage({
     if (!checkUser.status) {
         body = <>NO PERMISSION</>;
     } else {
-        let ingredients = (await prisma.fRecipeIngredient.findMany({
-                where: {
-                    recipeId: params.id
-                }, include: {
-                    ingredient: {select: {title: true}}
-                }
-            })).map(e => `${e.ingredient.title}-${e.amount}-${e.unit}`).join("|"),
-            tools = (await prisma.fRecipeTool.findMany({
-                where: {
-                    recipeId: params.id
-                }, include: {
-                    tool: {select: {title: true}}
-                }
-            })).map(e => `${e.tool.title}-${e.amount}-${e.unit}`).join("|");
+        let ingredients = (
+                await prisma.fRecipeIngredient.findMany({
+                    where: {
+                        recipeId: params.id
+                    },
+                    include: {
+                        ingredient: { select: { title: true } }
+                    }
+                })
+            )
+                .map((e) => `${e.ingredient.title}-${e.amount}-${e.unit}`)
+                .join("|"),
+            tools = (
+                await prisma.fRecipeTool.findMany({
+                    where: {
+                        recipeId: params.id
+                    },
+                    include: {
+                        tool: { select: { title: true } }
+                    }
+                })
+            )
+                .map((e) => `${e.tool.title}-${e.amount}-${e.unit}`)
+                .join("|");
 
         console.log(typeof tools);
 
@@ -48,21 +58,32 @@ export default async function RecipeExtraPage({
                     </code>
                 </h1>
                 <div>
-                    <h2 className="py-4 text-2xl font-bold">
-                        Ingredients
-                    </h2>
-                    <ExtrasEditor recipeId={params.id} tableName="fRecipeIngredient" extrasName="ingredient"
-                                  _extras={ingredients}/>
+                    <h2 className="py-4 text-2xl font-bold">Ingredients</h2>
+                    <ExtrasEditor
+                        recipeId={params.id}
+                        tableName="fRecipeIngredient"
+                        extrasName="ingredient"
+                        _extras={ingredients}
+                    />
                 </div>
                 <div>
-                    <h2 className="py-4 text-2xl font-bold">
-                        Tools
-                    </h2>
-                    <ExtrasEditor recipeId={params.id} tableName="fRecipeTool" extrasName="tool" _extras={tools}/>
+                    <h2 className="py-4 text-2xl font-bold">Tools</h2>
+                    <ExtrasEditor
+                        recipeId={params.id}
+                        tableName="fRecipeTool"
+                        extrasName="tool"
+                        _extras={tools}
+                    />
                 </div>
-                <hr/>
-                <Link href={"/recipe/" + params.id} className="block w-fit mx-auto">
-                    <UIButton title="Back to Recipe" buttonType={ButtonType.default}/>
+                <hr />
+                <Link
+                    href={"/recipe/" + params.id}
+                    className="mx-auto block w-fit"
+                >
+                    <UIButton
+                        title="Back to Recipe"
+                        buttonType={ButtonType.default}
+                    />
                 </Link>
             </div>
         );

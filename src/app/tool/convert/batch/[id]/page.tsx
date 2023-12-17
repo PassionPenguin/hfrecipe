@@ -5,6 +5,7 @@ import ClientFrame from "@/components/frame/clientFrame";
 import Loading, { LoadingSkeletonType } from "@/components/loading";
 import { InputType, UIInput, UITextarea } from "@/components/ui/input";
 import { protectClientRoutes } from "@/lib/auth/protectClientRoutes";
+import nanoid from "@/lib/nanoid";
 import Cookies from "js-cookie";
 import {
     ReadonlyURLSearchParams,
@@ -12,9 +13,12 @@ import {
     useSearchParams
 } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import nanoid from "@/lib/nanoid";
 
-export default function ToolBatchConvert({params}: {params: {id: string}}) {
+export default function ToolBatchConvert({
+    params
+}: {
+    params: { id: string };
+}) {
     const [tools, setTools] = useState([]);
     const [inserts, setInserts] = useState("");
     let body: React.ReactElement;
@@ -43,7 +47,6 @@ export default function ToolBatchConvert({params}: {params: {id: string}}) {
         });
     }, []);
 
-
     function generateInserts(fd: FormData) {
         let input = fd.get("input") as string;
         let r = "";
@@ -54,8 +57,11 @@ export default function ToolBatchConvert({params}: {params: {id: string}}) {
             if (m === null) return;
             try {
                 if (tools.find((df) => df.title === m[1]) === undefined) {
-                    let id = nanoid({length: 12})
-                    r += `INSERT INTO public."Tool" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll("'", "''")}', '${m[1].replaceAll("'", "''")}');\n`;
+                    let id = nanoid({ length: 12 });
+                    r += `INSERT INTO public."Tool" ("publicId", description, title) VALUES ('${id}', '${m[2].replaceAll(
+                        "'",
+                        "''"
+                    )}', '${m[1].replaceAll("'", "''")}');\n`;
                 }
             } catch (e) {
                 setLog(log + "\n" + e.toString());
