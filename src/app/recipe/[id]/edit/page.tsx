@@ -1,16 +1,16 @@
 import Dropdown from "@/components/dropdown";
 import Frame from "@/components/frame/frame";
-import { InputType, UIInput, UITextarea } from "@/components/ui/input";
-import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
+import {InputType, UIInput, UITextarea} from "@/components/ui/input";
+import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 import React from "react";
 import MarkdownEditor from "@/components/ui/editor";
 
-export default async function RecipeCreatePage({
-    params,
-    searchParams
-}: {
+export default async function RecipeEditPage({
+                                                   params,
+                                                   searchParams
+                                               }: {
     params: {
         id: string;
     };
@@ -24,15 +24,15 @@ export default async function RecipeCreatePage({
         body = <>NO PERMISSION</>;
     } else {
         let recipe = await prisma.recipe.findFirst({
-                where: { publicId: params.id },
-                include: { cuisineType: true }
+                where: {publicId: params.id},
+                include: {cuisineType: true}
             }),
             cuisineTypes = await prisma.cuisineType.findMany();
 
         body = (
             <div>
                 <form
-                    action="/api/recipe/update"
+                    action={"/api/recipe/" + params.id + "/update"}
                     method="POST"
                     className="space-y-4"
                 >
@@ -71,8 +71,8 @@ export default async function RecipeCreatePage({
                         placeholder="Servings Multiplier..."
                         hint="Servings per ingredients amounts"
                     />
-                    <MarkdownEditor source={recipe.steps} id="steps" title="Steps" />
-                    <MarkdownEditor source={recipe.tips} id="tips" title="Tips" />
+                    <MarkdownEditor source={recipe.steps} id="steps" title="Steps"/>
+                    <MarkdownEditor source={recipe.tips} id="tips" title="Tips"/>
                     <UIInput
                         type={InputType.text}
                         name="odCover"

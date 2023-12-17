@@ -6,15 +6,7 @@ import ReactMarkdown from "react-markdown";
 import {UserRole} from "../user/usermodel";
 import UserContentActions from "@/components/userContentActions";
 import LazyExtendedImage from "@/components/ui/extended-image";
-
-function parseUnit(unit: string) {
-    let reflect = [
-        {name: "g", id: "0000"},
-        {name: "mL", id: "0001"},
-        {name: "x", id: "0010"}
-    ];
-    return reflect.find((e) => e.id === unit)?.name;
-}
+import {parseUnit} from "@/lib/utils/extrasConverter";
 
 export default async function RecipeDetail({
                                                recipeId,
@@ -170,23 +162,17 @@ export default async function RecipeDetail({
     let editorialButtons = <></>;
     if (userRole === UserRole.Admin || userRole === UserRole.SuperAdmin) {
         editorialButtons = (
-            <div className="pt-16">
-                <Link href={"/recipe/edit/" + recipe.publicId}>
+            <div className="pt-16 space-x-4">
+                <Link href={"/recipe/" + recipeId + "/edit"}>
                     <button
                         className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
                         Edit
                     </button>
                 </Link>
-                <Link href={"/ingredient/convert/batch/" + recipe.publicId}>
+                <Link href={"/recipe/" + recipeId + "/extras"}>
                     <button
                         className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
-                        Edit Ingredients
-                    </button>
-                </Link>
-                <Link href={"/tool/convert/batch/" + recipe.publicId}>
-                    <button
-                        className="rounded border-2 border-slate-900 px-4 py-2 text-slate-900 hover:text-slate-700 dark:border-slate-100 dark:text-slate-100 dark:hover:text-slate-300">
-                        Edit Tool
+                        Edit Extras
                     </button>
                 </Link>
             </div>

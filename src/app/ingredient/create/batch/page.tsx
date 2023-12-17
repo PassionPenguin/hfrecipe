@@ -15,9 +15,6 @@ import {
 import React, {useEffect, useState} from "react";
 
 export default function IngredientBatchCreate() {
-    const [ingredients, setIngredients] = useState([]);
-    const [inserts, setInserts] = useState("");
-    let body: React.ReactElement;
     const [checkUser, setCheckUser] = useState({
         status: false,
         userType: UserRole.Guest,
@@ -25,6 +22,10 @@ export default function IngredientBatchCreate() {
     });
     let searchParams: ReadonlyURLSearchParams = useSearchParams(),
         pathname = usePathname();
+    let body: React.ReactElement;
+
+    const [ingredients, setIngredients] = useState([]);
+    const [inserts, setInserts] = useState("");
     const [log, setLog] = useState("");
 
     useEffect(() => {

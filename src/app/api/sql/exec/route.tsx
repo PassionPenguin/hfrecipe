@@ -14,10 +14,9 @@ export async function POST(req: NextRequest) {
     try {
         let result = "",
             ddls = ddl.split("\n");
-        console.log(ddls.join("\n") + "\n\n");
         for (let i = 0; i < ddls.length; i++) {
+            if(ddls[i].trim().length === 0) continue;
             let r = await prisma.$executeRawUnsafe(ddls[i]);
-            console.log(r);
             if (typeof r === "number")
                 result += "Rows affected " + r.toString() + "\n";
             else result += objToString(r) + "\n";
