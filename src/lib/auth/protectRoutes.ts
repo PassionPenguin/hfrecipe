@@ -87,18 +87,18 @@ export const _protectedRoutes = [
     {
         type: PathPermission.SuperAdmin,
         matchers: [
-            RegExp(/\/recipe\/(edit|create)/),
-            RegExp(/\/user\/(edit|create)/),
-            RegExp(/\/api\/(sql|graph)\/*/),
-            RegExp(/\/graph*/)
+            RegExp(/^\/recipe\/(edit|create)/),
+            RegExp(/^\/user\/(edit|create)/),
+            RegExp(/^\/api\/(sql|graph)\/*/),
+            RegExp(/^\/graph*/)
         ]
     },
     { type: PathPermission.Admin, matchers: [] },
     {
         type: PathPermission.User,
         matchers: [
-            RegExp(/\/user\/profile/),
-            RegExp(/\/api\/(recipe|ingredient|cuisineType|tool)\/*/)
+            RegExp(/^\/user\/(profile|otp)/),
+            RegExp(/^\/api\/(recipe|ingredient|cuisineType|tool)\/*/)
         ]
     },
     { type: PathPermission.Guest, matchers: [] }
