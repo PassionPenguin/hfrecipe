@@ -1,9 +1,10 @@
 import Frame from "@/components/frame/frame";
 import Logo from "@/components/logo";
-import { protectServerRoutes } from "@/lib/auth/protectServerRoutes";
+import {protectServerRoutes} from "@/lib/auth/protectServerRoutes";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 import React from "react";
+import {InputType, UIInput} from "@/components/ui/input";
 
 export default function SignIn({
     searchParams
@@ -96,6 +97,8 @@ export default function SignIn({
                                         />
                                     </div>
                                 </div>
+
+                                <UIInput type={InputType.number} name="otpCode" title="OTP Code" hint="6 digits code. (opt.)" />
 
                                 <div>
                                     <button

@@ -15,3 +15,23 @@
         display: inline-block;
     }
 }
+
+.qrCode {
+    --qrCodeBackground: #ffffff;
+    --qrCodeForeground: #000000;
+
+    & > path:last-child {
+        fill: var(--qrCodeBackground) !important;
+    }
+
+    & > path:first-child {
+        fill: var(--qrCodeForeground) !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .qrCode {
+        --qrCodeBackground: hsl(217.2 32.6% 17.5%);
+        --qrCodeForeground: #ffffff;
+    }
+}

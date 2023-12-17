@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
 
     const data = {
         name: formData.get("name") as string,
-        password: formData.get("password") as string,
         otpCode: formData.get("otpCode") as string
     };
 
@@ -27,7 +26,6 @@ export async function POST(req: NextRequest) {
         let result = await prisma.user.findFirst({
             where: {
                 title: data.name,
-                password: await hashPassword(data.password)
             },
             select: {
                 publicId: true,
@@ -38,7 +36,7 @@ export async function POST(req: NextRequest) {
         });
 
         if (result) {
-            if(result.otpSalt.trim().length && generateTOTPCode(result.otpSalt) === data.otpCode) {
+            if(data.otpCode === generateTOTPCode(result.otpSalt)) {
                 session = {
                     id: result.publicId,
                     dateCreated: Date.now(),
@@ -49,14 +47,15 @@ export async function POST(req: NextRequest) {
                 };
                 path = `/?state=true&msg=Signed in as ${result.title}`;
             } else {
-                path = "/user/signin?state=false&msg=Incorrect otp code"
+                path = `/user/signin/otp?state=false&msg=Incorrect TOTP`;
             }
         } else {
-            path = `/user/signin?state=false&msg=Incorrect username or password`;
+            path = `/user/signin/otp?state=false&msg=Unknown things happened`;
         }
     } catch (e: any) {
-        path = `/user/signin?state=false&msg=${e.toString()}`;
+        path = `/user/signin/otp?state=false&msg=${e.toString()}`;
     }
+
     if (session) {
         let encodedSession = encodeSession(process.env.CRYPTO_SALT, session);
         headers = {
