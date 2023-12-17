@@ -20,12 +20,13 @@ model CuisineType {
 
 model Ingredient {
   publicId          String              @id(map: "ingredients_pk") @db.VarChar(12)
-  description       String
+  description       String              @db.VarChar(256)
   expensiveness     Int?
   createdAt         DateTime            @default(now()) @db.Timestamptz(6)
   updatedAt         DateTime            @default(now()) @db.Timestamptz(6)
   deletedAt         DateTime?           @db.Timestamptz(6)
   title             String              @db.VarChar(31)
+  tips              String              @default("")
   fRecipeIngredient fRecipeIngredient[]
 }
 
@@ -56,12 +57,13 @@ model Recipe {
 
 model Tool {
   publicId      String        @id(map: "Tool_pk") @db.VarChar(12)
-  description   String
+  description   String        @default("") @db.VarChar(256)
   expensiveness Int?
   createdAt     DateTime      @default(now()) @db.Timestamptz(6)
   updatedAt     DateTime      @default(now()) @db.Timestamptz(6)
   deletedAt     DateTime?     @db.Timestamptz(6)
   title         String        @db.VarChar(31)
+  tips          String        @default("")
   fRecipeTool   fRecipeTool[]
 }
 
@@ -76,6 +78,7 @@ model User {
   createdAt        DateTime           @default(now()) @db.Timestamptz(6)
   updatedAt        DateTime           @default(now()) @db.Timestamptz(6)
   deletedAt        DateTime?          @db.Timestamptz(6)
+  otpSalt          String?            @db.Char(16)
   fUserRecipeLikes fUserRecipeLikes[]
 }
 
